@@ -8,6 +8,7 @@
         <version>2.3.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>ru.maksimov</groupId>
     <artifactId>task-manager</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -30,6 +31,12 @@
             <version>2.0.1.RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
