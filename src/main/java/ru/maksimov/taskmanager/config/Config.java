@@ -12,6 +12,6 @@ public class Config {
 
     @Bean(name = "store")
     public Map<Long, Task> getStore() {
-        return new HashMap<>();
+      return new HashMap();
     }
 }

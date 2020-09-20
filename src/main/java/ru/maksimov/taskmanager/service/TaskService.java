@@ -21,30 +21,35 @@ public interface TaskService {
      * Поиск зачдачи
      *
      * @param id номер задачи
-     * @return
+     * @return возвращает задачу по заданному id
      */
     Task read(Long id);
 
     /**
      * Обновление задачи
      *
-     * @param task
-     * @return
+     * @param task задача с новыми данными
+     * @return возвращает обновленную задачу
      */
     Task update(Task task);
 
     /**
      * Удаление задачи
      *
-     * @param id
-     * @return
+     * @param id номер задачи
+     * @return возвращает удаленную задачу
      */
     Task delete(Long id);
 
     /**
      * Получение списка задач
      *
-     * @return
+     * @return возвращает список задач
      */
     List<Task> getList();
+
+    /**
+     * Инициализация хранилища задач при первом запуске
+     */
+    void initStore();
 }

@@ -1,26 +1,31 @@
 package ru.maksimov.taskmanager.dao;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import ru.maksimov.taskmanager.dao.store.IStore;
 import ru.maksimov.taskmanager.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
-@Component
+@Repository
 public class TaskDaoImpl implements TaskDAO {
-    private Map<Long, Task> taskMap;
+    private final Map<Long, Task> taskMap;
+    private final IStore store;
 
-    public TaskDaoImpl(@Qualifier("store") Map<Long, Task> taskMap) {
+    public TaskDaoImpl(@Qualifier("store") Map<Long, Task> taskMap,
+                       @Qualifier("fileStore") IStore store) {
         this.taskMap = taskMap;
+        this.store = store;
     }
 
     /**
      * Создание задачи
      *
-     * @param task
-     * @return
+     * @param task задача для записи в хранилище
+     * @return возвращает задачу, сохраненную в хранилище
      */
     @Override
     public Task create(Task task) throws Exception {
@@ -32,8 +37,8 @@ public class TaskDaoImpl implements TaskDAO {
             throw new Exception("Наименование задачи отсутсвует");
         }
 
-
         taskMap.putIfAbsent(task.getId(), task);
+        writeToStore(task);
         return taskMap.get(task.getId());
     }
 
@@ -41,7 +46,7 @@ public class TaskDaoImpl implements TaskDAO {
      * Поиск зачдачи
      *
      * @param id номер задачи
-     * @return
+     * @return возвращает задучу по заданному id
      */
     @Override
     public Task read(Long id) {
@@ -51,8 +56,8 @@ public class TaskDaoImpl implements TaskDAO {
     /**
      * Обновление задачи
      *
-     * @param task
-     * @return
+     * @param task задача с новыми данными
+     * @return возвращает обновленную задачу
      */
     @Override
     public Task update(Task task) {
@@ -62,8 +67,8 @@ public class TaskDaoImpl implements TaskDAO {
     /**
      * Удаление задачи
      *
-     * @param id
-     * @return
+     * @param id id задачи
+     * @return возвращает задачу которая была удалена из хранилища
      */
     @Override
     public Task delete(Long id) {
@@ -79,7 +84,7 @@ public class TaskDaoImpl implements TaskDAO {
     /**
      * Получение списка задач
      *
-     * @return
+     * @return возврашает список задач
      */
     @Override
     public List<Task> getList() {
@@ -90,8 +95,29 @@ public class TaskDaoImpl implements TaskDAO {
         return tasks;
     }
 
+    /**
+     * Очистка хранилища
+     */
     @Override
     public void cleanStore() {
         taskMap.clear();
+    }
+
+    /**
+     * Запись в хранилище
+     *
+     * @param task задача для записи в хранилище
+     */
+    @Override
+    public void writeToStore(Task task) {
+        CompletableFuture.runAsync(() -> store.writeToStore(task));
+    }
+
+    /**
+     * Инициализация хранилища
+     */
+    @Override
+    public void initStore() {
+        store.initStore();
     }
 }

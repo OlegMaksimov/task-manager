@@ -14,6 +14,11 @@ public class Main {
 
     private final TaskService service;
 
+    /**
+     * Проверка инициализаци хранилища при первом запуске
+     */
+    private static Boolean isInitStore = Boolean.FALSE; // TODO: 20.09.2020 исследовать возможность инициализации через Spring
+
     public Main(TaskService service) {
         this.service = service;
     }
@@ -22,11 +27,17 @@ public class Main {
     public String createTask(
             @ShellOption String name
     ) {
-        // TODO: 08.09.2020 https://github.com/OlegMaksimov/task-manager/issues/3 
+        // TODO: 08.09.2020 Проблема с кавычками https://github.com/OlegMaksimov/task-manager/issues/3
 //        if (!checkTaskName(name)) {
 //            System.out.println("Имя задачи должно начинаться с кавычек. Смотри help task-create. ");
 //            return null;
 //        }
+
+//        Проверка инициализации хранилища
+        if (!isInitStore) {
+            isInitStore = initStore();
+        }
+
         Task task;
         try {
             task = service.create(name);
@@ -41,6 +52,11 @@ public class Main {
     public String findTask(
             @ShellOption Long id
     ) {
+        //        Проверка инициализации хранилища
+        if (!isInitStore) {
+            isInitStore = initStore();
+        }
+
         Task task = service.read(id);
         return task.toString();
     }
@@ -66,6 +82,11 @@ public class Main {
     @ShellMethod(key = "task-list", value = "The method for output task lists. Example: task-list ")
     public String getListTask(
     ) {
+        //        Проверка инициализации хранилища
+        if (!isInitStore) {
+            isInitStore = initStore();
+        }
+
         List<Task> taskList = service.getList();
         String result = null;
         if (taskList != null && taskList.size() > 0) {
@@ -76,5 +97,15 @@ public class Main {
                     .reduce("", String::concat);
         }
         return result != null ? result : "Нет задач";
+    }
+
+    private Boolean initStore() {
+        try {
+            service.initStore();
+            return Boolean.TRUE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Boolean.FALSE;
+        }
     }
 }

@@ -19,8 +19,9 @@ public class TaskServiceImpl implements TaskService {
     /**
      * Создание задачи
      *
-     * @param taskName
-     * @return
+     * @param taskName наименование задачи
+     * @return Возвращает созданную задачу
+     * @throws Exception выбрасывает ошибку при невозможности создании
      */
     @Override
     public Task create(String taskName) throws Exception {
@@ -32,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
      * Поиск зачдачи
      *
      * @param id номер задачи
-     * @return
+     * @return возвращает задачу по заданному id
      */
     @Override
     public Task read(Long id) {
@@ -42,8 +43,8 @@ public class TaskServiceImpl implements TaskService {
     /**
      * Обновление задачи
      *
-     * @param task
-     * @return
+     * @param task задача с новыми данными
+     * @return возвращает обновленную задачу
      */
     @Override
     public Task update(Task task) {
@@ -53,8 +54,8 @@ public class TaskServiceImpl implements TaskService {
     /**
      * Удаление задачи
      *
-     * @param id
-     * @return
+     * @param id номер задачи
+     * @return возвращает удаленную задачу
      */
     @Override
     public Task delete(Long id) {
@@ -64,10 +65,18 @@ public class TaskServiceImpl implements TaskService {
     /**
      * Получение списка задач
      *
-     * @return
+     * @return возвращает список задач
      */
     @Override
     public List<Task> getList() {
         return dao.getList();
+    }
+
+    /**
+     * Инициализация хранилища задач при первом запуске
+     */
+    @Override
+    public void initStore() {
+        dao.initStore();
     }
 }

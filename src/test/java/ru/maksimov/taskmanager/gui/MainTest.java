@@ -1,6 +1,6 @@
 package ru.maksimov.taskmanager.gui;
 
-import com.sun.tools.javac.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +9,9 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.service.TaskService;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
@@ -71,7 +74,7 @@ class MainTest {
 
     @Test
     void testGetListTask() {
-        List<Task> taskList = List.of(TASK);
+        List<Task> taskList = Collections.singletonList(TASK);
         when(taskService.getList()).thenReturn(taskList);
 
         String listTask = main.getListTask();
@@ -83,6 +86,6 @@ class MainTest {
     void testGetListTaskWithNoTask() {
         String listTask = main.getListTask();
 
-        Assertions.assertTrue(listTask.equals("Нет задач"));
+        Assertions.assertEquals(listTask, "Нет задач");
     }
 }

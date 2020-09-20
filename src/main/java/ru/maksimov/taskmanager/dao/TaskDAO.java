@@ -12,8 +12,8 @@ public interface TaskDAO {
     /**
      * Создание задачи
      *
-     * @param task
-     * @return
+     * @param task задача для записи в хранилище
+     * @return возвращает задачу, сохраненную в хранилище
      */
     Task create(Task task) throws Exception;
 
@@ -21,32 +21,47 @@ public interface TaskDAO {
      * Поиск зачдачи
      *
      * @param id номер задачи
-     * @return
+     * @return возвращает задучу по заданному id
      */
     Task read(Long id);
 
     /**
      * Обновление задачи
      *
-     * @param task
-     * @return
+     * @param task задача с новыми данными
+     * @return возвращает обновленную задачу
      */
     Task update(Task task);
 
     /**
      * Удаление задачи
      *
-     * @param id
-     * @return
+     * @param id id задачи
+     * @return возвращает задачу которая была удалена из хранилища
      */
     Task delete(Long id);
 
     /**
      * Получение списка задач
      *
-     * @return
+     * @return возврашает список задач
      */
     List<Task> getList();
 
+    /**
+     * Очистка хранилища
+     */
     void cleanStore();
+
+    /**
+     * Запись в хранилище
+     *
+     * @param task задача для записи в хранилище
+     */
+    void writeToStore(Task task);
+
+    /**
+     * Инициализация хранилища
+     */
+    void initStore();
 }

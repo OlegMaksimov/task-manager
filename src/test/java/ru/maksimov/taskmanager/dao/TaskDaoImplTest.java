@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import ru.maksimov.taskmanager.dao.store.FileStore;
+import ru.maksimov.taskmanager.dao.store.IStore;
 import ru.maksimov.taskmanager.model.Task;
 
 import java.util.HashMap;
@@ -20,15 +22,19 @@ class TaskDaoImplTest {
 
     @Configuration
     static class Config {
-
         @Bean
-        public Map<Long, Task> getStore() {
+        public IStore getStore() {
+            return new FileStore("Test.csv", getStoreMap());
+        }
+
+        @Bean(name = "testStore")
+        public Map<Long, Task> getStoreMap() {
             return new HashMap<>();
         }
 
         @Bean
         public TaskDAO getDao() {
-            return new TaskDaoImpl(getStore());
+            return new TaskDaoImpl(getStoreMap(), getStore());
         }
     }
 
@@ -54,9 +60,7 @@ class TaskDaoImplTest {
     void testCreateWithEmptyName() {
         task.setName("");
 
-        Exception e = assertThrows(Exception.class, () -> {
-            taskDAO.create(task);
-        });
+        Exception e = assertThrows(Exception.class, () -> taskDAO.create(task));
         String expectedMessage = "Наименование задачи отсутсвует";
 
         assertEquals(expectedMessage, e.getMessage());
@@ -64,9 +68,7 @@ class TaskDaoImplTest {
 
     @Test
     void testCreateFailWithNull() {
-        Exception e = assertThrows(Exception.class, () -> {
-            taskDAO.create(null);
-        });
+        Exception e = assertThrows(Exception.class, () -> taskDAO.create(null));
         String expectedMessage = "Пустой задача";
 
         assertEquals(expectedMessage, e.getMessage());
@@ -76,9 +78,7 @@ class TaskDaoImplTest {
     void testDoublePutValue() throws Exception {
         Task task1 = taskDAO.create(task);
 
-        Exception e = assertThrows(Exception.class, () -> {
-            taskDAO.create(task);
-        });
+        Exception e = assertThrows(Exception.class, () -> taskDAO.create(task));
         String expectedMessage = "Дублирование задачи";
 
         assertNotNull(task1);
@@ -150,11 +150,16 @@ class TaskDaoImplTest {
     }
 
     @Test
-    void testGetTaskListWithNoTask() throws Exception {
+    void testGetTaskListWithNoTask() {
 
         List<Task> resultList = taskDAO.getList();
 
         assertEquals(0L, resultList.size());
+    }
+
+    @Test
+    void writeToStore() {
+        taskDAO.writeToStore(task);
     }
 
     private Task makeTask() {
