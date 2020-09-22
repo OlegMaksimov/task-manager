@@ -1,6 +1,7 @@
 package ru.maksimov.taskmanager.dao;
 
 import ru.maksimov.taskmanager.model.Task;
+import ru.maksimov.taskmanager.model.enums.TaskState;
 
 import java.util.List;
 
@@ -64,4 +65,13 @@ public interface TaskDAO {
      * Инициализация хранилища
      */
     void initStore();
+
+    /**
+     * Переводит статус задачи в  COMPLETE
+     *
+     * @param id номер задачи
+     * @return Возвращает измененную задачу
+     * @see TaskState
+     */
+    Task completeTask(Long id);
 }

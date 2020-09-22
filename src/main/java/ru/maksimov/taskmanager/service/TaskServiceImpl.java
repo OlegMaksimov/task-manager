@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.maksimov.taskmanager.dao.TaskDAO;
 import ru.maksimov.taskmanager.model.Task;
+import ru.maksimov.taskmanager.model.enums.TaskState;
 
 import java.util.List;
 
@@ -78,5 +79,17 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void initStore() {
         dao.initStore();
+    }
+
+    /**
+     * Переводит статус задачи в  COMPLETE
+     *
+     * @param id номер задачи
+     * @return Возвращает измененную задачу
+     * @see TaskState
+     */
+    @Override
+    public Task completeTask(Long id) {
+        return dao.completeTask(id);
     }
 }

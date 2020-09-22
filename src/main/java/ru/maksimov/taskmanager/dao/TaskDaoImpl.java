@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import ru.maksimov.taskmanager.dao.store.IStore;
 import ru.maksimov.taskmanager.model.Task;
+import ru.maksimov.taskmanager.model.enums.TaskState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,12 +74,11 @@ public class TaskDaoImpl implements TaskDAO {
     @Override
     public Task delete(Long id) {
         Task task = taskMap.get(id);
-
         if (task == null) {
             return null;
         }
-
-        return taskMap.remove(task.getId());
+        task.delete();
+        return taskMap.get(id);
     }
 
     /**
@@ -119,5 +119,20 @@ public class TaskDaoImpl implements TaskDAO {
     @Override
     public void initStore() {
         store.initStore();
+    }
+
+    /**
+     * Переводит статус задачи в  COMPLETE
+     *
+     * @param id номер задачи
+     * @return Возвращает измененную задачу
+     * @see TaskState
+     */
+    @Override
+    public Task completeTask(Long id) {
+        Task task = taskMap.get(id);
+        task.complete();
+
+        return taskMap.get(id);
     }
 }

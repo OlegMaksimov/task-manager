@@ -1,5 +1,6 @@
 package ru.maksimov.taskmanager.dao;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.maksimov.taskmanager.dao.store.FileStore;
 import ru.maksimov.taskmanager.dao.store.IStore;
 import ru.maksimov.taskmanager.model.Task;
+import ru.maksimov.taskmanager.model.enums.TaskState;
 
 import java.util.HashMap;
 import java.util.List;
@@ -128,7 +130,9 @@ class TaskDaoImplTest {
     void testDelete() throws Exception {
         taskDAO.create(task);
 
-        taskDAO.delete(task.getId());
+        Task result = taskDAO.delete(task.getId());
+
+        assertEquals(TaskState.DELETE, result.getState());
     }
 
     @Test
@@ -160,6 +164,15 @@ class TaskDaoImplTest {
     @Test
     void writeToStore() {
         taskDAO.writeToStore(task);
+    }
+
+    @Test
+    void completeTask() throws Exception {
+        taskDAO.create(task);
+
+        Task checkTask = taskDAO.completeTask(task.getId());
+
+        Assertions.assertEquals(TaskState.COMPLETE, checkTask.getState());
     }
 
     private Task makeTask() {

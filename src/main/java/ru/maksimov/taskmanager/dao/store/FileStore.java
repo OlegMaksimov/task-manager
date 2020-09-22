@@ -30,7 +30,7 @@ public class FileStore implements IStore {
 
     private final Map<Long, Task> taskMap;
 
-    private final String[] HEADERS = {"ID", "NAME"};
+    private final String[] HEADERS = {"ID", "NAME", "STATE"};
 
     public FileStore(@Value("${store.filename}") String fileName, @Qualifier("store") Map<Long, Task> taskMap) {
         this.fileName = fileName;
@@ -71,7 +71,7 @@ public class FileStore implements IStore {
             List<Task> taskList = new ArrayList<>();
             TaskWrapper taskWrapper;
             while ((taskWrapper = reader.read(TaskWrapper.class, HEADERS, getCellProcessor())) != null) {
-                Task task = Task.getInstance(taskWrapper.getId(), taskWrapper.getName());
+                Task task = Task.getInstance(taskWrapper.getId(), taskWrapper.getName(), taskWrapper.getState());
                 taskList.add(task);
             }
             return taskList;
@@ -103,7 +103,8 @@ public class FileStore implements IStore {
     private CellProcessor[] getCellProcessor() {
         return new CellProcessor[]{
                 new ParseLong(), //  task id
-                new NotNull() // task name
+                new NotNull(), // task name
+                new NotNull() //  task state
         };
     }
 }

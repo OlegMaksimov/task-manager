@@ -14,4 +14,5 @@ import lombok.experimental.FieldDefaults;
 public class TaskWrapper {
     Long id;
     String name;
+    String state;
 }

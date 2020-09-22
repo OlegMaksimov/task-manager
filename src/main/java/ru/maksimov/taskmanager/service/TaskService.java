@@ -1,6 +1,7 @@
 package ru.maksimov.taskmanager.service;
 
 import ru.maksimov.taskmanager.model.Task;
+import ru.maksimov.taskmanager.model.enums.TaskState;
 
 import java.util.List;
 
@@ -52,4 +53,13 @@ public interface TaskService {
      * Инициализация хранилища задач при первом запуске
      */
     void initStore();
+
+    /**
+     * Переводит статус задачи в  COMPLETE
+     *
+     * @param id номер задачи
+     * @return Возвращает измененную задачу
+     * @see TaskState
+     */
+    Task completeTask(Long id);
 }

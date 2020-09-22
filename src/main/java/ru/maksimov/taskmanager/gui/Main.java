@@ -8,11 +8,14 @@ import ru.maksimov.taskmanager.service.TaskService;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Scanner;
 
 @ShellComponent
 public class Main {
 
     private final TaskService service;
+
+    private Scanner scanner;
 
     /**
      * Проверка инициализаци хранилища при первом запуске
@@ -61,12 +64,18 @@ public class Main {
         return task.toString();
     }
 
-    @ShellMethod(key = "task-update", value = "The method for update task. Example: task-update <task_id> \" <task_name> \"")
+    @ShellMethod(key = "task-update", value = "The method for update task. Example: task-update <task_id> ")
     public String updateTask(
-            @ShellOption Long id,
-            @ShellOption String taskName
+            @ShellOption Long id
     ) {
-        Task task = Task.getInstance(id, taskName);
+        scanner = new Scanner(System.in);
+        Task task = service.read(id);
+        System.out.println(task);
+
+        System.out.println("Введите новое имя задачи");
+        String newName = scanner.nextLine();
+
+        task.setName(newName);
         service.update(task);
         return task.toString();
     }
@@ -79,9 +88,19 @@ public class Main {
         return task.toString();
     }
 
+    @ShellMethod(key = "task-complete", value = "The method for complete task. Example: task-complete <task_id>")
+    public String CompleteTask(
+            @ShellOption Long id
+    ) {
+        Task task = service.completeTask(id);
+        return task.toString();
+    }
+
     @ShellMethod(key = "task-list", value = "The method for output task lists. Example: task-list ")
     public String getListTask(
     ) {
+        String TITLE = "\t\t СПИСОК ЗАДАЧ \n";
+
         //        Проверка инициализации хранилища
         if (!isInitStore) {
             isInitStore = initStore();
@@ -96,7 +115,7 @@ public class Main {
                     .map(name -> name.concat("\n"))
                     .reduce("", String::concat);
         }
-        return result != null ? result : "Нет задач";
+        return result != null ? TITLE + result : "Нет задач";
     }
 
     private Boolean initStore() {
