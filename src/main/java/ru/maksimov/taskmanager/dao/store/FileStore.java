@@ -40,16 +40,18 @@ public class FileStore implements IStore {
     /**
      * Записывает задачу в хранилище
      *
-     * @param task задача
      * @return true  если успешно
      */
     @Override
-    public Boolean writeToStore(Task task) {
+    public Boolean writeToStore() {
         try (
-                ICsvBeanWriter writer = new CsvBeanWriter(new FileWriter(fileName, true),
+                ICsvBeanWriter writer = new CsvBeanWriter(new FileWriter(fileName),
                         CsvPreference.STANDARD_PREFERENCE)
         ) {
-            writer.write(task, HEADERS, getCellProcessor());
+            for (Map.Entry<Long, Task> entry : taskMap.entrySet()) {
+                Task task = entry.getValue();
+                writer.write(task, HEADERS, getCellProcessor());
+            }
             return Boolean.TRUE;
         } catch (IOException e) {
             e.printStackTrace();

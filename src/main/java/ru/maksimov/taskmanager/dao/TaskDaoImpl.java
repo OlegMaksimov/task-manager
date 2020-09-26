@@ -39,7 +39,7 @@ public class TaskDaoImpl implements TaskDAO {
         }
 
         taskMap.putIfAbsent(task.getId(), task);
-        writeToStore(task);
+        writeToStore();
         return taskMap.get(task.getId());
     }
 
@@ -57,12 +57,17 @@ public class TaskDaoImpl implements TaskDAO {
     /**
      * Обновление задачи
      *
-     * @param task задача с новыми данными
+     * @param newTask задача с новыми данными
      * @return возвращает обновленную задачу
      */
     @Override
-    public Task update(Task task) {
-        return taskMap.put(task.getId(), task);
+    public Task update(Task newTask) {
+        Task task = taskMap.get(newTask.getId());
+        if (task != null) {
+            task = taskMap.put(newTask.getId(), newTask);
+            writeToStore();
+        }
+        return task;
     }
 
     /**
@@ -78,6 +83,7 @@ public class TaskDaoImpl implements TaskDAO {
             return null;
         }
         task.delete();
+        writeToStore();
         return taskMap.get(id);
     }
 
@@ -105,12 +111,10 @@ public class TaskDaoImpl implements TaskDAO {
 
     /**
      * Запись в хранилище
-     *
-     * @param task задача для записи в хранилище
      */
     @Override
-    public void writeToStore(Task task) {
-        CompletableFuture.runAsync(() -> store.writeToStore(task));
+    public void writeToStore() {
+        CompletableFuture.runAsync(() -> store.writeToStore());
     }
 
     /**
@@ -132,7 +136,7 @@ public class TaskDaoImpl implements TaskDAO {
     public Task completeTask(Long id) {
         Task task = taskMap.get(id);
         task.complete();
-
+        writeToStore();
         return taskMap.get(id);
     }
 }

@@ -56,10 +56,8 @@ public interface TaskDAO {
 
     /**
      * Запись в хранилище
-     *
-     * @param task задача для записи в хранилище
      */
-    void writeToStore(Task task);
+    void writeToStore();
 
     /**
      * Инициализация хранилища

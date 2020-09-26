@@ -163,7 +163,7 @@ class TaskDaoImplTest {
 
     @Test
     void writeToStore() {
-        taskDAO.writeToStore(task);
+        taskDAO.writeToStore();
     }
 
     @Test
