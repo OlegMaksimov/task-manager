@@ -49,6 +49,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return "" + id + ". ....... " + name + "\t" + state;
+        return "" + id + ". ................... " + name;
     }
 }

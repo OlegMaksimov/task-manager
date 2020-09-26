@@ -4,6 +4,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.maksimov.taskmanager.model.Task;
+import ru.maksimov.taskmanager.model.enums.TaskState;
 import ru.maksimov.taskmanager.service.TaskService;
 
 import java.util.Comparator;
@@ -110,6 +111,7 @@ public class Main {
         String result = null;
         if (taskList != null && taskList.size() > 0) {
             result = taskList.stream()
+                    .filter(e -> e.getState().equals(TaskState.NEW))
                     .sorted(Comparator.comparing(Task::getId))
                     .map(Task::toString)
                     .map(name -> name.concat("\n"))
