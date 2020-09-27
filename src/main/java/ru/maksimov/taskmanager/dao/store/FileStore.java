@@ -12,6 +12,7 @@ import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 import ru.maksimov.taskmanager.model.Task;
+import ru.maksimov.taskmanager.model.enums.TaskState;
 
 import java.io.File;
 import java.io.FileReader;
@@ -30,7 +31,7 @@ public class FileStore implements IStore {
 
     private final Map<Long, Task> taskMap;
 
-    private final String[] HEADERS = {"ID", "NAME", "STATE"};
+    private final String[] HEADERS = {"ID", "NAME", "STATE", "PARENTID"};
 
     public FileStore(@Value("${store.filename}") String fileName, @Qualifier("store") Map<Long, Task> taskMap) {
         this.fileName = fileName;
@@ -73,7 +74,12 @@ public class FileStore implements IStore {
             List<Task> taskList = new ArrayList<>();
             TaskWrapper taskWrapper;
             while ((taskWrapper = reader.read(TaskWrapper.class, HEADERS, getCellProcessor())) != null) {
-                Task task = Task.getInstance(taskWrapper.getId(), taskWrapper.getName(), taskWrapper.getState());
+                Task task = Task.builder()
+                        .id(taskWrapper.getId())
+                        .name(taskWrapper.getName())
+                        .state(TaskState.valueOf(taskWrapper.getState()))
+                        .parentId(taskWrapper.getParentId())
+                        .build();
                 taskList.add(task);
             }
             return taskList;
@@ -95,18 +101,24 @@ public class FileStore implements IStore {
         }
         List<Task> taskList = readFromStore();
         if (taskList != null && taskList.size() > 0) {
+            Long maxCountTask = 0L;
             for (Task task : taskList) {
+                if (maxCountTask < task.getId()) {
+                    maxCountTask = task.getId();
+                }
                 taskMap.put(task.getId(), task);
             }
+            Task.countTask.set(maxCountTask);
         }
         return taskMap.size();
     }
 
     private CellProcessor[] getCellProcessor() {
         return new CellProcessor[]{
-                new ParseLong(), //  task id
-                new NotNull(), // task name
-                new NotNull() //  task state
+                new ParseLong(),    // id
+                new NotNull(),      // name
+                new NotNull(),      // state
+                new ParseLong()       // parentId
         };
     }
 }

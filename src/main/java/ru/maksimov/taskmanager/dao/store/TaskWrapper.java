@@ -15,4 +15,5 @@ public class TaskWrapper {
     Long id;
     String name;
     String state;
+    long parentId;
 }
