@@ -95,9 +95,14 @@ public class FileStore implements IStore {
         }
         List<Task> taskList = readFromStore();
         if (taskList != null && taskList.size() > 0) {
+            Long maxCountTask = 0L;
             for (Task task : taskList) {
+                if (maxCountTask < task.getId()) {
+                    maxCountTask = task.getId();
+                }
                 taskMap.put(task.getId(), task);
             }
+            Task.countTask.set(maxCountTask);
         }
         return taskMap.size();
     }

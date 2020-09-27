@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Task {
-    static AtomicLong countTask = new AtomicLong();
+    public static AtomicLong countTask = new AtomicLong();
     Long id;
     String name;
     TaskState state;
