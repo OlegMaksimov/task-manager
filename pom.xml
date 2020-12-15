@@ -19,9 +19,9 @@
     </properties>
 
     <scm>
-        <connection>scm:git:ssh://github.com:OlegMaksimov/task-manager.git</connection>
-        <url>scm:git:ssh://github.com:OlegMaksimov/task-manager.git</url>
-        <developerConnection>scm:git:ssh://github.com:OlegMaksimov/task-manager.git</developerConnection>
+<!--        <connection>scm:git:ssh://github.com:OlegMaksimov/task-manager.git</connection>-->
+        <url>https://github.com/OlegMaksimov/task-manager</url>
+        <developerConnection>scm:git:https://github.com/OlegMaksimov/task-manager.git</developerConnection>
         <tag>v0.0.1</tag>
     </scm>
 
