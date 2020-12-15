@@ -10,7 +10,7 @@
 
     <groupId>ru.maksimov</groupId>
     <artifactId>task-manager</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>task-manager</name>
     <description>Demo project for Spring Boot</description>
 
@@ -22,7 +22,7 @@
         <connection>scm:git:ssh://github.com:OlegMaksimov/task-manager.git</connection>
         <url>https://github.com/OlegMaksimov/task-manager</url>
         <developerConnection>scm:git:https://github.com/OlegMaksimov/task-manager</developerConnection>
-        <tag>v0.0.1</tag>
+        <tag>v1.0.0</tag>
     </scm>
 
     <dependencies>
