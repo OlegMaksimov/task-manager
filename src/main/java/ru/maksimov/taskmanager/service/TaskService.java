@@ -62,4 +62,11 @@ public interface TaskService {
      * @see TaskState
      */
     Task completeTask(Long id);
+
+    /**
+     * Возвращает список задач на сегодня
+     *
+     * @return {@link Task}
+     */
+    List<Task> getTodayTask();
 }

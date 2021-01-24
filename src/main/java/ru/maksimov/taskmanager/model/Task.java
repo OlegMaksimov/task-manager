@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import ru.maksimov.taskmanager.model.enums.TaskState;
+import ru.maksimov.taskmanager.model.enums.Time;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -19,21 +21,38 @@ import java.util.concurrent.atomic.AtomicLong;
 @AllArgsConstructor
 @Builder
 public class Task {
+
     /**
      * Общее количество задач. На основании этого поля генерируется id
      */
     public static AtomicLong countTask = new AtomicLong();
 
     Long id;
+
+    /**
+     * Наименование задачи
+     */
     String name;
     /**
      * Статус задачи
      */
     TaskState state;
+
+    /**
+     * Дата начало
+     */
+    LocalDate startDate;
+
+    /**
+     * Время начало задачи
+     */
+    Time time;
+
     /**
      * Родительская задача. По умолчнаю null
      */
     Long parentId;
+
     /**
      * Список подзадач
      */

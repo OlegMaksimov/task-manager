@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.springframework.shell.standard.commands.Clear;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.service.TaskService;
@@ -17,25 +18,28 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-class MainTest {
+class TaskCommandTest {
 
     @Mock
     private TaskService taskService;
 
-    private Main main;
+    @Mock
+    private Clear clear;
+
+    private TaskCommand taskCommand;
     private final String TASKNAME = "\"taskName\"";
     private final Task TASK = new Task(TASKNAME);
 
     @BeforeEach
     void setUp() {
-        main = new Main(taskService);
+        taskCommand = new TaskCommand(taskService, clear);
     }
 
     @Test
     void testCreateTask() throws Exception {
         when(taskService.create(any())).thenReturn(TASK);
 
-        String task = main.createTask(TASKNAME);
+        String task = taskCommand.createTask(TASKNAME);
 
         Assertions.assertTrue(task.contains(TASKNAME));
     }
@@ -45,7 +49,7 @@ class MainTest {
         Long id = TASK.getId();
         when(taskService.read(id)).thenReturn(TASK);
 
-        String task = main.findTask(id);
+        String task = taskCommand.findTask(id);
 
         Assertions.assertTrue(task.contains(TASKNAME));
     }
@@ -58,7 +62,7 @@ class MainTest {
         Task task = Task.getInstance(id, newTaskName, "NEW");
         when(taskService.update(any(Task.class))).thenReturn(task);
 
-        String updateTask = main.updateTask(id);
+        String updateTask = taskCommand.updateTask(id);
 
         Assertions.assertTrue(updateTask.contains(newTaskName));
     }
@@ -68,7 +72,7 @@ class MainTest {
         Long id = TASK.getId();
         when(taskService.delete(id)).thenReturn(TASK);
 
-        String deleteTask = main.deleteTask(id);
+        String deleteTask = taskCommand.deleteTask(id);
 
         Assertions.assertTrue(deleteTask.contains(TASKNAME));
     }
@@ -78,14 +82,14 @@ class MainTest {
         List<Task> taskList = Collections.singletonList(TASK);
         when(taskService.getList()).thenReturn(taskList);
 
-        String listTask = main.getListTask();
+        String listTask = taskCommand.getListTask();
 
         Assertions.assertTrue(listTask.contains(TASKNAME));
     }
 
     @Test
     void testGetListTaskWithNoTask() {
-        String listTask = main.getListTask();
+        String listTask = taskCommand.getListTask();
 
         Assertions.assertEquals(listTask, "Нет задач");
     }

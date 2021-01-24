@@ -6,7 +6,10 @@ import ru.maksimov.taskmanager.dao.TaskDAO;
 import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.model.enums.TaskState;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -91,5 +94,24 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task completeTask(Long id) {
         return dao.completeTask(id);
+    }
+
+    /**
+     * Возвращает список задач на сегодня
+     *
+     * @return {@link Task}
+     */
+    @Override
+    public List<Task> getTodayTask() {
+        List<Task> taskList = getList();
+        return taskList.stream()
+                .filter(e -> LocalDate.now().equals(e.getStartDate()))
+                .sorted((o1, o2) -> {
+                    if ((Objects.isNull(o1.getTime())) || (Objects.isNull(o2.getTime()))) {
+                        throw new IllegalArgumentException("Отсутствует значение время выполнения");
+                    }
+                    return o1.getTime().getSort().compareTo(o2.getTime().getSort());
+                })
+                .collect(Collectors.toList());
     }
 }
