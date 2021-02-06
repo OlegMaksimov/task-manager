@@ -8,6 +8,7 @@ import ru.maksimov.taskmanager.model.enums.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -69,6 +70,13 @@ public class Task {
         this.parentId = Long.valueOf(0);
     }
 
+    public Task(String name, Long parentId) {
+        this.id = countTask.incrementAndGet();
+        this.name = name;
+        this.state = TaskState.NEW;
+        this.parentId = parentId;
+    }
+
     private Task(Long id, String name, TaskState state) {
         this.id = id;
         this.name = name;
@@ -90,6 +98,13 @@ public class Task {
 
     public void delete() {
         this.state = TaskState.DELETE;
+    }
+
+    public void addSubTask(Long taskId) {
+        if (Objects.isNull(this.subTasks)) {
+            subTasks = new ArrayList<>();
+        }
+        this.subTasks.add(taskId);
     }
 
     @Override

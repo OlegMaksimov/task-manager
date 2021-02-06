@@ -67,14 +67,20 @@ class FileStoreTest {
     @Test
     void readFromStore() {
         Task task = getTask();
+        Task task1 = getTask();
+        Task task2 = getTask();
+        task.addSubTask(task1.getId());
+        task.addSubTask(task2.getId());
         Map<Long, Task> taskMap = new HashMap();
         taskMap.put(task.getId(), task);
+        taskMap.put(task1.getId(), task1);
+        taskMap.put(task2.getId(), task2);
         iStore = new FileStore(FILENAME, taskMap);
         iStore.writeToStore();
         file = new File(FILENAME);
         List<Task> taskList = iStore.readFromStore();
 
-        assertEquals(1, taskList.size());
+        assertEquals(3, taskList.size());
 
         file.delete();
     }
@@ -84,6 +90,7 @@ class FileStoreTest {
         Task task = getTask();
         Task task1 = getTask();
         Task task2 = getTask();
+        task.addSubTask(task2.getId());
         Map<Long, Task> taskMap = new HashMap();
         taskMap.put(task.getId(), task);
         taskMap.put(task1.getId(), task1);
@@ -97,6 +104,8 @@ class FileStoreTest {
         iStore.writeToStore();
 
         Assertions.assertEquals(3, iStore.initStore());
+
+        file.delete();
     }
 
 }

@@ -34,6 +34,20 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
+     * Создание подзадачи
+     *
+     * @param taskName наименование задачи
+     * @param parentId id родительской подзадачи
+     * @return Возвращает созданную задачу
+     * @throws Exception выбрасывает ошибку при невозможности создании
+     */
+    @Override
+    public Task createSubTask(String taskName, Long parentId) throws Exception {
+        Task task = new Task(taskName, parentId);
+        return dao.create(task);
+    }
+
+    /**
      * Поиск зачдачи
      *
      * @param id номер задачи

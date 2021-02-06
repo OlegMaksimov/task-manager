@@ -19,4 +19,5 @@ public class TaskWrapper {
     String description;
     String startDate;
     String time;
+    String subTasks;
 }

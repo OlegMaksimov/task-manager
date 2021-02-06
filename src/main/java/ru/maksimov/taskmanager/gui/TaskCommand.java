@@ -1,11 +1,13 @@
 package ru.maksimov.taskmanager.gui;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.shell.standard.commands.Clear;
 import ru.maksimov.taskmanager.gui.graphic.Library;
 import ru.maksimov.taskmanager.model.Task;
+import ru.maksimov.taskmanager.model.dto.TaskDto;
 import ru.maksimov.taskmanager.model.enums.TaskState;
 import ru.maksimov.taskmanager.model.enums.Time;
 import ru.maksimov.taskmanager.service.TaskService;
@@ -15,6 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @ShellComponent
 public class TaskCommand {
@@ -68,6 +71,36 @@ public class TaskCommand {
         return task.toString();
     }
 
+    @ShellMethod(key = "task-add-sb", value = "The method for create subTasks. " +
+            "Example: task-addSubTask \" <parent_task_id> \"")
+    public String addSubTask(
+            @ShellOption Long id
+    ) {
+        clear.clear();
+
+//        Проверка инициализации хранилища
+        if (!isInitStore) {
+            isInitStore = initStore();
+        }
+
+        Task parentTask = service.read(id);
+        if (Objects.isNull(parentTask)) {
+            return TASK_NOT_FOUND;
+        }
+        System.out.println("Введите новое имя подзадачи");
+        scanner = new Scanner(System.in);
+        String name = scanner.nextLine();
+        try {
+            Task task = service.createSubTask(name, id);
+            parentTask.addSubTask(task.getId());
+            service.update(parentTask);
+            return task.toString();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
     @ShellMethod(key = "task-find", value = "The method for find task by Id. Example: task-find <task_id>")
     public String findTask(
             @ShellOption Long id
@@ -80,11 +113,29 @@ public class TaskCommand {
         }
 
         Task task = service.read(id);
+        TaskDto taskDto = makeDto(task);
+
         StringBuilder builder = new StringBuilder();
         builder.append(Library.getTitle(task.getName()));
-        builder.append(Library.getTaskView(task));
+        builder.append(Library.getTaskView(taskDto));
 
         return builder.toString();
+    }
+
+    private TaskDto makeDto(Task task) {
+        TaskDto taskDto = new TaskDto();
+        BeanUtils.copyProperties(task, taskDto);
+        if (task.getParentId() > 0) {
+            taskDto.setParentTask(service.read(task.getParentId()));
+        }
+        if (Objects.nonNull(task.getSubTasks())) {
+            List<Task> subTasks = task.getSubTasks()
+                    .stream()
+                    .map(e -> service.read(e))
+                    .collect(Collectors.toList());
+            taskDto.setSubTasks(subTasks);
+        }
+        return taskDto;
     }
 
     @ShellMethod(key = "task-update", value = "The method for update task. Example: task-update <task_id> ")

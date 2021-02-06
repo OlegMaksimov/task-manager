@@ -34,7 +34,7 @@ public class FileStore implements IStore {
 
     private final Map<Long, Task> taskMap;
 
-    private final String[] HEADERS = {"ID", "NAME", "STATE", "PARENTID", "DESCRIPTION", "STARTDATE", "TIME"};
+    private final String[] HEADERS = {"ID", "NAME", "STATE", "PARENTID", "DESCRIPTION", "STARTDATE", "TIME", "SUBTASKS"};
 
     public FileStore(@Value("${store.filename}") String fileName, @Qualifier("store") Map<Long, Task> taskMap) {
         this.fileName = fileName;
@@ -93,6 +93,15 @@ public class FileStore implements IStore {
                 if (Objects.nonNull(taskWrapper.getTime()) && !taskWrapper.getStartDate().isEmpty()) {
                     task.setTime(Time.valueOf(taskWrapper.getTime()));
                 }
+                if (Objects.nonNull(taskWrapper.getSubTasks()) && !Objects.equals("[]", taskWrapper.getSubTasks())) {
+                    String[] split = taskWrapper.getSubTasks().replaceAll("\\[", "")
+                            .replaceAll("\\]", "")
+                            .replaceAll(" ", "")
+                            .split(",");
+                    for (String s : split) {
+                        task.addSubTask(Long.valueOf(s.trim()));
+                    }
+                }
                 taskList.add(task);
             }
             return taskList;
@@ -134,7 +143,8 @@ public class FileStore implements IStore {
                 new ParseLong(),       // parentId
                 new org.supercsv.cellprocessor.Optional(), // description
                 new org.supercsv.cellprocessor.Optional(),// date
-                new org.supercsv.cellprocessor.Optional() //time
+                new org.supercsv.cellprocessor.Optional(), //time
+                new org.supercsv.cellprocessor.Optional() //subTasks
         };
     }
 }

@@ -1,6 +1,7 @@
 package ru.maksimov.taskmanager.gui.graphic;
 
 import ru.maksimov.taskmanager.model.Task;
+import ru.maksimov.taskmanager.model.dto.TaskDto;
 
 import java.util.Objects;
 
@@ -15,6 +16,7 @@ public class Library {
     private static final String TASK_VIEW = "" +
             "описание задачи:   %s\n" +
             "родительская задача:   %s\n" +
+            "подзадачи:   %s\n" +
             "статус:    %s\n" +
             "дата завершения:   %s\n" +
             "начало выполнения: %s\n";
@@ -28,13 +30,21 @@ public class Library {
         return String.format(TITLE, title);
     }
 
-    public static String getTaskView(Task task) {
+    public static String getTaskView(TaskDto task) {
         String description = Objects.nonNull(task.getDescription()) ? task.getDescription() : "NONE";
-        String parent = Objects.nonNull(task.getParentId()) ? task.getParentId().toString() : "NONE";
+        String parent = Objects.nonNull(task.getParentTask()) ? task.getParentTask().toString() : "NONE";
         String state = Objects.nonNull(task.getState()) ? task.getState().toString() : "NONE";
         String date = Objects.nonNull(task.getStartDate()) ? task.getStartDate().toString() : "NONE";
         String time = Objects.nonNull(task.getTime()) ? task.getTime().getVal() : "NONE";
+        String subTask = "NONE";
+        if (Objects.nonNull(task.getSubTasks()) && task.getSubTasks().size() > 0) {
+            StringBuilder builder = new StringBuilder("\n");
+            for (Task t1 : task.getSubTasks()) {
+                builder.append("\t\t\t\t" + t1.toString() + "\n");
+            }
+            subTask = builder.toString();
+        }
 
-        return String.format(TASK_VIEW, description, parent, state, date, time);
+        return String.format(TASK_VIEW, description, parent, subTask, state, date, time);
     }
 }

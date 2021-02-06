@@ -19,6 +19,16 @@ public interface TaskService {
     Task create(String taskName) throws Exception;
 
     /**
+     * Создание подзадачи
+     *
+     * @param taskName наименование задачи
+     * @param parentId id родительской подзадачи
+     * @return Возвращает созданную задачу
+     * @throws Exception выбрасывает ошибку при невозможности создании
+     */
+    Task createSubTask(String taskName, Long parentId) throws Exception;
+
+    /**
      * Поиск зачдачи
      *
      * @param id номер задачи
