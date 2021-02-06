@@ -16,4 +16,7 @@ public class TaskWrapper {
     String name;
     String state;
     long parentId;
+    String description;
+    String startDate;
+    String time;
 }

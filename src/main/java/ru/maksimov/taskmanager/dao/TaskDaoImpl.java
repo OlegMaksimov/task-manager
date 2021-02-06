@@ -31,7 +31,7 @@ public class TaskDaoImpl implements TaskDAO {
     @Override
     public Task create(Task task) throws Exception {
         if (task == null) {
-            throw new Exception("Пустой задача");
+            throw new Exception("Пустая задача");
         } else if (taskMap.get(task.getId()) != null) {
             throw new Exception("Дублирование задачи");
         } else if (task.getName().isEmpty()) {

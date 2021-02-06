@@ -1,9 +1,6 @@
 package ru.maksimov.taskmanager.model;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.maksimov.taskmanager.model.enums.TaskState;
 import ru.maksimov.taskmanager.model.enums.Time;
@@ -17,6 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Задачи и дела.
  */
 @Getter
+@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
@@ -33,6 +31,12 @@ public class Task {
      * Наименование задачи
      */
     String name;
+
+    /**
+     * описание задачи
+     */
+    String description;
+
     /**
      * Статус задачи
      */

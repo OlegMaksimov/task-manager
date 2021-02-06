@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.maksimov.taskmanager.TestUtils.getTask;
 
 @ExtendWith(SpringExtension.class)
 class TaskDaoImplTest {
@@ -71,7 +72,7 @@ class TaskDaoImplTest {
     @Test
     void testCreateFailWithNull() {
         Exception e = assertThrows(Exception.class, () -> taskDAO.create(null));
-        String expectedMessage = "Пустой задача";
+        String expectedMessage = "Пустая задача";
 
         assertEquals(expectedMessage, e.getMessage());
     }
@@ -119,7 +120,7 @@ class TaskDaoImplTest {
 
     @Test
     void testUpdateFail() {
-        Task task = new Task("123");
+        Task task = makeTask();
 
         Task result = taskDAO.update(task);
 
@@ -137,7 +138,7 @@ class TaskDaoImplTest {
 
     @Test
     void testDeleteFail() {
-        Task task = new Task("123");
+        Task task = makeTask();
 
         Task result = taskDAO.delete(task.getId());
 
@@ -176,6 +177,6 @@ class TaskDaoImplTest {
     }
 
     private Task makeTask() {
-        return new Task("someTask");
+        return getTask();
     }
 }

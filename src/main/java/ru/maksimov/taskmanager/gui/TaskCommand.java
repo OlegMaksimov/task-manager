@@ -7,8 +7,10 @@ import org.springframework.shell.standard.commands.Clear;
 import ru.maksimov.taskmanager.gui.graphic.Library;
 import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.model.enums.TaskState;
+import ru.maksimov.taskmanager.model.enums.Time;
 import ru.maksimov.taskmanager.service.TaskService;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -17,8 +19,14 @@ import java.util.Scanner;
 @ShellComponent
 public class TaskCommand {
 
+    public static final String INCORECT_VALUE = "Не верное значение! Попробуйте еще раз или нажмите enter";
     private static final String TASK_FOR_TODAY = "СПИСОК ЗАДАЧ:";
     private static final String NONE_TASK = "НЕТ ЗАДАЧ";
+    public static final String TASK_NOT_FOUND = "Задача не найдена!";
+    public static final String NEW_NAME = "Введите новое имя задачи или нажмите Enter";
+    public static final String NEW_DESCRIPTION = "Введите новое описание задачи или нажмите Enter";
+    public static final String NEW_DATE = "Введите новую дату выполнения задачи(2000-12-01) или нажмите Enter";
+    public static final String NEW_TIME = "Введите новое время выполнения задачи(09.00, 14.00) или нажмите Enter";
     private final TaskService service;
     private Scanner scanner;
     private final Clear clear;
@@ -72,7 +80,11 @@ public class TaskCommand {
         }
 
         Task task = service.read(id);
-        return task.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append(Library.getTitle(task.getName()));
+        builder.append(Library.getTaskView(task));
+
+        return builder.toString();
     }
 
     @ShellMethod(key = "task-update", value = "The method for update task. Example: task-update <task_id> ")
@@ -81,16 +93,57 @@ public class TaskCommand {
     ) {
         clear.clear();
 
-        scanner = new Scanner(System.in);
         Task task = service.read(id);
-        System.out.println(task);
+        if (Objects.isNull(task)) {
+            return TASK_NOT_FOUND;
+        }
+        scanner = new Scanner(System.in);
+        System.out.println(findTask(id));
 
-        System.out.println("Введите новое имя задачи");
+        System.out.println(NEW_NAME);
         String newName = scanner.nextLine();
+        if (!newName.isEmpty()) {
+            task.setName(newName);
+        }
 
-        task.setName(newName);
+        System.out.println(NEW_DESCRIPTION);
+        String description = scanner.nextLine();
+        if (!description.isEmpty()) {
+            task.setDescription(description);
+        }
+
+        System.out.println(NEW_DATE);
+        Boolean isContinue = true;
+        while (isContinue) {
+            String date = scanner.nextLine();
+            if (!date.isEmpty()) {
+                try {
+                    task.setStartDate(LocalDate.parse(date));
+                } catch (Exception e) {
+                    System.out.println(INCORECT_VALUE);
+                    continue;
+                }
+            }
+            isContinue = false;
+        }
+
+        System.out.println(NEW_TIME);
+        isContinue = true;
+        while (isContinue) {
+            String time = scanner.nextLine();
+            if (!time.isEmpty()) {
+                try {
+                    task.setTime(Time.getByVal(time));
+                } catch (IllegalArgumentException e) {
+                    System.out.println(INCORECT_VALUE);
+                    continue;
+                }
+            }
+            isContinue = false;
+        }
+
         service.update(task);
-        return task.toString();
+        return findTask(id);
     }
 
     @ShellMethod(key = "task-delete", value = "The method for delete task. Example: task-delete <task_id>")

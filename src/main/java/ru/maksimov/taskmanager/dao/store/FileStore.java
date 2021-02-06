@@ -13,14 +13,17 @@ import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.model.enums.TaskState;
+import ru.maksimov.taskmanager.model.enums.Time;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Файловое хранилище данных
@@ -31,7 +34,7 @@ public class FileStore implements IStore {
 
     private final Map<Long, Task> taskMap;
 
-    private final String[] HEADERS = {"ID", "NAME", "STATE", "PARENTID"};
+    private final String[] HEADERS = {"ID", "NAME", "STATE", "PARENTID", "DESCRIPTION", "STARTDATE", "TIME"};
 
     public FileStore(@Value("${store.filename}") String fileName, @Qualifier("store") Map<Long, Task> taskMap) {
         this.fileName = fileName;
@@ -57,6 +60,9 @@ public class FileStore implements IStore {
         } catch (IOException e) {
             e.printStackTrace();
             return Boolean.FALSE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Boolean.FALSE;
         }
     }
 
@@ -79,7 +85,14 @@ public class FileStore implements IStore {
                         .name(taskWrapper.getName())
                         .state(TaskState.valueOf(taskWrapper.getState()))
                         .parentId(taskWrapper.getParentId())
+                        .description(taskWrapper.getDescription())
                         .build();
+                if (Objects.nonNull(taskWrapper.getStartDate())) {
+                    task.setStartDate(LocalDate.parse(taskWrapper.getStartDate()));
+                }
+                if (Objects.nonNull(taskWrapper.getTime()) && !taskWrapper.getStartDate().isEmpty()) {
+                    task.setTime(Time.valueOf(taskWrapper.getTime()));
+                }
                 taskList.add(task);
             }
             return taskList;
@@ -118,7 +131,10 @@ public class FileStore implements IStore {
                 new ParseLong(),    // id
                 new NotNull(),      // name
                 new NotNull(),      // state
-                new ParseLong()       // parentId
+                new ParseLong(),       // parentId
+                new org.supercsv.cellprocessor.Optional(), // description
+                new org.supercsv.cellprocessor.Optional(),// date
+                new org.supercsv.cellprocessor.Optional() //time
         };
     }
 }

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static ru.maksimov.taskmanager.TestUtils.getTask;
 
 class FileStoreTest {
 
@@ -20,7 +21,7 @@ class FileStoreTest {
 
     @Test
     void writeToStoreOneTask() {
-        Task task = new Task("someTask");
+        Task task = getTask();
         Map<Long, Task> taskMap = new HashMap();
         taskMap.put(task.getId(), task);
         iStore = new FileStore(FILENAME, taskMap);
@@ -38,11 +39,12 @@ class FileStoreTest {
         file.delete();
     }
 
+
     @Test
     void writeToStoreMultipleTask() {
-        Task task = new Task("someTask");
-        Task task1 = new Task("someTask1");
-        Task task2 = new Task("someTask2");
+        Task task = getTask();
+        Task task1 = getTask();
+        Task task2 = getTask();
         Map<Long, Task> taskMap = new HashMap();
         taskMap.put(task.getId(), task);
         taskMap.put(task1.getId(), task1);
@@ -64,7 +66,7 @@ class FileStoreTest {
 
     @Test
     void readFromStore() {
-        Task task = new Task("someTask");
+        Task task = getTask();
         Map<Long, Task> taskMap = new HashMap();
         taskMap.put(task.getId(), task);
         iStore = new FileStore(FILENAME, taskMap);
@@ -79,9 +81,9 @@ class FileStoreTest {
 
     @Test
     void initStore() {
-        Task task = new Task("someTask");
-        Task task1 = new Task("someTask1");
-        Task task2 = new Task("someTask2");
+        Task task = getTask();
+        Task task1 = getTask();
+        Task task2 = getTask();
         Map<Long, Task> taskMap = new HashMap();
         taskMap.put(task.getId(), task);
         taskMap.put(task1.getId(), task1);
@@ -96,4 +98,5 @@ class FileStoreTest {
 
         Assertions.assertEquals(3, iStore.initStore());
     }
+
 }

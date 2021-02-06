@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.shell.standard.commands.Clear;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import ru.maksimov.taskmanager.gui.graphic.Library;
 import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.service.TaskService;
 
@@ -89,8 +90,9 @@ class TaskCommandTest {
 
     @Test
     void testGetListTaskWithNoTask() {
+        String NONE_TASK = "НЕТ ЗАДАЧ";
         String listTask = taskCommand.getListTask();
 
-        Assertions.assertEquals(listTask, "Нет задач");
+        Assertions.assertEquals(listTask, Library.getTitle(NONE_TASK));
     }
 }

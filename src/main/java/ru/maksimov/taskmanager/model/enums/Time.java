@@ -1,5 +1,7 @@
 package ru.maksimov.taskmanager.model.enums;
 
+import java.util.Arrays;
+
 public enum Time {
     NINE_AM("09.00", 1),
     TEN_AM("10.00", 2),
@@ -32,5 +34,12 @@ public enum Time {
 
     public Integer getSort() {
         return sort;
+    }
+
+    public static Time getByVal(String val) {
+        return Arrays.stream(Time.values())
+                .filter(time -> time.val.equals(val))
+                .findFirst()
+                .get();
     }
 }

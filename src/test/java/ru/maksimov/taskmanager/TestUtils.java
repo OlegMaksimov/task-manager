@@ -1,5 +1,10 @@
 package ru.maksimov.taskmanager;
 
+import ru.maksimov.taskmanager.model.Task;
+import ru.maksimov.taskmanager.model.enums.TaskState;
+import ru.maksimov.taskmanager.model.enums.Time;
+
+import java.time.LocalDate;
 import java.util.Random;
 
 public class TestUtils {
@@ -32,5 +37,17 @@ public class TestUtils {
                 .limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+    }
+
+    public static Task getTask() {
+        return Task.builder()
+                .id(Long.valueOf(getNumeric(1)))
+                .name(getAlphabeticString())
+                .state(TaskState.NEW)
+                .parentId(Long.valueOf(getNumeric(1)))
+                .description(getAlphabeticString())
+                .startDate(LocalDate.now())
+                .time(Time.NINE)
+                .build();
     }
 }
