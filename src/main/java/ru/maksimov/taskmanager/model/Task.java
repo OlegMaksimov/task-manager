@@ -59,6 +59,11 @@ public class Task {
     Long parentId;
 
     /**
+     * Признак главной задачи дня
+     */
+    Boolean isMainTask;
+
+    /**
      * Список подзадач
      */
     List<Long> subTasks = new ArrayList();

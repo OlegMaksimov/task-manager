@@ -122,7 +122,7 @@ public class TaskServiceImpl implements TaskService {
                 .filter(e -> LocalDate.now().equals(e.getStartDate()))
                 .sorted((o1, o2) -> {
                     if ((Objects.isNull(o1.getTime())) || (Objects.isNull(o2.getTime()))) {
-                        throw new IllegalArgumentException("Отсутствует значение время выполнения");
+                        return 1;
                     }
                     return o1.getTime().getSort().compareTo(o2.getTime().getSort());
                 })

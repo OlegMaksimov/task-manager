@@ -114,6 +114,7 @@ public class TaskDaoImpl implements TaskDAO {
      */
     @Override
     public void writeToStore() {
+        // TODO: 08.03.2021 @Async
         CompletableFuture.runAsync(() -> store.writeToStore());
     }
 

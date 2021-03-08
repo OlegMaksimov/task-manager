@@ -6,9 +6,12 @@ import ru.maksimov.taskmanager.model.dto.TaskDto;
 import java.util.Objects;
 
 public class Library {
+    private static final String TODAY_TASK_TITLE = "" +
+            "TIME   ID   TITLE                                           MAIN\n";
+
     private static final String TODAY_TASK = "" +
-            "%s  %s                                                  \n" +
-            "-----  ------------------------------------------------------\n";
+            "%s  %s    %s                                           %s \n" +
+            "-----  ---  ----------------------------------------------------\n";
 
     private static final String TITLE = "\t\t\t\t %s \n" +
             "-------------------------------------------------------------\n\n";
@@ -22,8 +25,15 @@ public class Library {
             "начало выполнения: %s\n";
 
 
-    public static String getTodayTask(String time, String taskName) {
-        return String.format(TODAY_TASK, time, taskName);
+    public static String getTodayTask(Task task) {
+        return String.format(TODAY_TASK, getTaskTime(task), task.getId(), task.getName(), getMainTask(task));
+    }
+    public static String getTodayTaskTitle(){
+        return TODAY_TASK_TITLE;
+    }
+
+    private static String getMainTask(Task task) {
+        return Boolean.TRUE.equals(task.getIsMainTask()) ? "*" : "";
     }
 
     public static String getTitle(String title) {
@@ -46,5 +56,9 @@ public class Library {
         }
 
         return String.format(TASK_VIEW, description, parent, subTask, state, date, time);
+    }
+
+    private static String getTaskTime(Task task) {
+        return Objects.nonNull(task.getTime()) ? task.getTime().getVal() : "NONE ";
     }
 }
