@@ -15,6 +15,7 @@ import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.model.enums.TaskState;
 import ru.maksimov.taskmanager.model.enums.Time;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -57,9 +58,6 @@ public class FileStore implements IStore {
                 writer.write(task, HEADERS, getCellProcessor());
             }
             return Boolean.TRUE;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Boolean.FALSE;
         } catch (Exception e) {
             e.printStackTrace();
             return Boolean.FALSE;
@@ -116,6 +114,7 @@ public class FileStore implements IStore {
      *
      * @return возвращает кол-во записей в хранилище
      */
+    @PostConstruct
     public int initStore() {
         File file = new File(fileName);
         if (!file.exists()) {

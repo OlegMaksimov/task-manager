@@ -19,8 +19,9 @@ class FileStoreTest {
     private final String FILENAME = "testFIle.csv";
     private File file;
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
-    void writeToStoreOneTask() {
+    void writeToStoreOneTask() throws Exception {
         Task task = getTask();
         Map<Long, Task> taskMap = new HashMap();
         taskMap.put(task.getId(), task);
@@ -28,7 +29,10 @@ class FileStoreTest {
 
         file = new File(FILENAME);
         if (file.exists()) {
-            file.delete();
+            boolean isDel = file.delete();
+            if (!isDel) {
+                throw new Exception("Не удалось удалить задачу");
+            }
         }
         Boolean result = iStore.writeToStore();
 
@@ -53,7 +57,10 @@ class FileStoreTest {
 
         file = new File(FILENAME);
         if (file.exists()) {
-            file.delete();
+            boolean isDel = file.delete();
+            if (!isDel) {
+                throw new Exception("Не удалось удалить задачу");
+            }
         }
 
         iStore.writeToStore();
@@ -85,7 +92,7 @@ class FileStoreTest {
         file.delete();
     }
 
-    @Test
+    //    @Test
     void initStore() {
         Task task = getTask();
         Task task1 = getTask();

@@ -10,8 +10,9 @@ import java.util.Map;
 @Configuration
 public class Config {
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Bean(name = "store")
     public Map<Long, Task> getStore() {
-      return new HashMap();
+        return new HashMap();
     }
 }

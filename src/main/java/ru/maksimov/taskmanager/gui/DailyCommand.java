@@ -9,7 +9,6 @@ import ru.maksimov.taskmanager.model.enums.Time;
 import ru.maksimov.taskmanager.service.TaskService;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -79,9 +78,10 @@ public class DailyCommand {
 
             task.setStartDate(LocalDate.now());
 
-            System.out.println("Это главная задача дня: (true|enter)");
+            System.out.println("Это главная задача дня: (y|enter)");
             String isMainTask = scanner.nextLine();
-            task.setIsMainTask(new Boolean(isMainTask));
+
+            task.setIsMainTask("y".equalsIgnoreCase(isMainTask));
 
             System.out.println(NEW_TIME);
             String taskTime = scanner.nextLine();
@@ -93,10 +93,10 @@ public class DailyCommand {
                 }
             }
             service.update(task);
-            System.out.println("Задача добавлена.\n Добавить новую задачу? (true|enter)");
+            System.out.println("Задача добавлена.\n Добавить новую задачу? (y|enter)");
 
             String isContinue = scanner.nextLine();
-            if (!new Boolean(isContinue)) {
+            if (!"y".equalsIgnoreCase(isContinue)) {
                 break;
             }
         }

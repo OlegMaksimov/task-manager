@@ -56,11 +56,6 @@ public class TaskCommand {
 //            return null;
 //        }
 
-//        Проверка инициализации хранилища
-        if (!isInitStore) {
-            isInitStore = initStore();
-        }
-
         Task task;
         try {
             task = service.create(name);
@@ -77,11 +72,6 @@ public class TaskCommand {
             @ShellOption Long id
     ) {
         clear.clear();
-
-//        Проверка инициализации хранилища
-        if (!isInitStore) {
-            isInitStore = initStore();
-        }
 
         Task parentTask = service.read(id);
         if (Objects.isNull(parentTask)) {
@@ -107,11 +97,6 @@ public class TaskCommand {
     ) {
         clear.clear();
 
-        //        Проверка инициализации хранилища
-        if (!isInitStore) {
-            isInitStore = initStore();
-        }
-
         Task task = service.read(id);
         TaskDto taskDto = makeDto(task);
 
@@ -131,7 +116,7 @@ public class TaskCommand {
         if (Objects.nonNull(task.getSubTasks())) {
             List<Task> subTasks = task.getSubTasks()
                     .stream()
-                    .map(e -> service.read(e))
+                    .map(service::read)
                     .collect(Collectors.toList());
             taskDto.setSubTasks(subTasks);
         }
@@ -164,7 +149,7 @@ public class TaskCommand {
         }
 
         System.out.println(NEW_DATE);
-        Boolean isContinue = true;
+        boolean isContinue = true;
         while (isContinue) {
             String date = scanner.nextLine();
             if (!date.isEmpty()) {

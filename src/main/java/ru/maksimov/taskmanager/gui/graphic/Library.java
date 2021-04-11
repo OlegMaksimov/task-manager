@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Library {
     private static final String TODAY_TASK_TITLE = "" +
-            "TIME   ID   TITLE                                           MAIN\n";
+            "TIME   ID   TITLE                                                      MAIN\n";
 
     private static final String TODAY_TASK = "" +
             "%s  %s    %s                                           %s \n" +
@@ -50,7 +50,9 @@ public class Library {
         if (Objects.nonNull(task.getSubTasks()) && task.getSubTasks().size() > 0) {
             StringBuilder builder = new StringBuilder("\n");
             for (Task t1 : task.getSubTasks()) {
-                builder.append("\t\t\t\t" + t1.toString() + "\n");
+                builder.append("\t\t\t\t");
+                builder.append(t1.toString());
+                builder.append("\n");
             }
             subTask = builder.toString();
         }
