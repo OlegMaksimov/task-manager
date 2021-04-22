@@ -120,7 +120,6 @@ public class TaskServiceImpl implements TaskService {
         List<Task> taskList = getList();
         return taskList.stream()
                 .filter(e -> LocalDate.now().equals(e.getStartDate()))
-                .filter(t -> TaskState.NEW.equals(t.getState()))
                 .sorted((o1, o2) -> {
                     if ((Objects.isNull(o1.getTime())) || (Objects.isNull(o2.getTime()))) {
                         return 1;

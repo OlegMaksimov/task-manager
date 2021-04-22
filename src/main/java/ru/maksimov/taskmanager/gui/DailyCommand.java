@@ -3,8 +3,10 @@ package ru.maksimov.taskmanager.gui;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.commands.Clear;
+import ru.maksimov.taskmanager.gui.graphic.DaylyLibrary;
 import ru.maksimov.taskmanager.gui.graphic.Library;
 import ru.maksimov.taskmanager.model.Task;
+import ru.maksimov.taskmanager.model.enums.TaskState;
 import ru.maksimov.taskmanager.model.enums.Time;
 import ru.maksimov.taskmanager.service.TaskService;
 
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static ru.maksimov.taskmanager.gui.TaskCommand.*;
 
@@ -33,7 +36,9 @@ public class DailyCommand {
     public String getTodayTask() {
         clear.clear();
 
-        List<Task> taskList = service.getTodayTask();
+        List<Task> taskList = service.getTodayTask().stream()
+                .filter(task -> task.getState().equals(TaskState.NEW))
+                .collect(Collectors.toList());
         StringBuilder builder = new StringBuilder();
         builder.append(Library.getTitle(TASK_FOR_TODAY));
         builder.append(Library.getTodayTaskTitle());
@@ -102,5 +107,12 @@ public class DailyCommand {
         }
 
         return getTodayTask();
+    }
+
+    @ShellMethod(key = "today-result", value = "The method return result of the day.")
+    public String getResultDay() {
+        clear.clear();
+        List<Task> taskList = service.getTodayTask();
+        return DaylyLibrary.getDayResultTemplate(taskList);
     }
 }
