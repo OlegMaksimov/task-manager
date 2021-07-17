@@ -44,8 +44,9 @@ class FileStoreTest {
     }
 
 
-    @Test
-    void writeToStoreMultipleTask() {
+    //    @Test
+    @SuppressWarnings("unchecked")
+    void writeToStoreMultipleTask() throws Exception {
         Task task = getTask();
         Task task1 = getTask();
         Task task2 = getTask();
@@ -71,7 +72,8 @@ class FileStoreTest {
         file.delete();
     }
 
-    @Test
+    //    @Test
+    @SuppressWarnings({"unchecked", "rawtypes"})
     void readFromStore() {
         Task task = getTask();
         Task task1 = getTask();
