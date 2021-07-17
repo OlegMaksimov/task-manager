@@ -1,7 +1,6 @@
 package ru.maksimov.taskmanager.gui;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -35,8 +34,6 @@ public class TaskCommand {
     private Scanner scanner;
     private final Clear clear;
 
-    @Autowired
-    private DailyCommand dailyCommand;
 
     /**
      * Проверка инициализаци хранилища при первом запуске
@@ -203,7 +200,7 @@ public class TaskCommand {
         clear.clear();
 
         service.completeTask(id);
-        return dailyCommand.getResultDay();
+        return getListTask();
     }
 
     @ShellMethod(key = "task-list", value = "The method for output task lists. Example: task-list ")
