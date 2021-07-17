@@ -3,9 +3,9 @@ package ru.maksimov.taskmanager.model.dto;
 import lombok.Data;
 import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.model.enums.TaskState;
-import ru.maksimov.taskmanager.model.enums.Time;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class TaskDto {
     String description;
     TaskState state;
     LocalDate startDate;
-    Time time;
+    LocalTime time;
     Task parentTask;
-    List<Task> subTasks = new ArrayList();
+    List<Task> subTasks = new ArrayList<>();
 }

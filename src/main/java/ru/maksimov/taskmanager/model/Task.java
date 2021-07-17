@@ -3,9 +3,9 @@ package ru.maksimov.taskmanager.model;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.maksimov.taskmanager.model.enums.TaskState;
-import ru.maksimov.taskmanager.model.enums.Time;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -51,7 +51,7 @@ public class Task {
     /**
      * Время начало задачи
      */
-    Time time;
+    LocalTime time;
 
     /**
      * Родительская задача. По умолчнаю null
@@ -66,13 +66,13 @@ public class Task {
     /**
      * Список подзадач
      */
-    List<Long> subTasks = new ArrayList();
+    List<Long> subTasks = new ArrayList<>();
 
     public Task(String name) {
         this.id = countTask.incrementAndGet();
         this.name = name;
         this.state = TaskState.NEW;
-        this.parentId = Long.valueOf(0);
+        this.parentId = 0L;
     }
 
     public Task(String name, Long parentId) {

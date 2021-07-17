@@ -9,10 +9,10 @@ import ru.maksimov.taskmanager.gui.graphic.Library;
 import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.model.dto.TaskDto;
 import ru.maksimov.taskmanager.model.enums.TaskState;
-import ru.maksimov.taskmanager.model.enums.Time;
 import ru.maksimov.taskmanager.service.TaskService;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +29,7 @@ public class TaskCommand {
     public static final String NEW_NAME = "Введите новое имя задачи или нажмите Enter";
     public static final String NEW_DESCRIPTION = "Введите новое описание задачи или нажмите Enter";
     public static final String NEW_DATE = "Введите новую дату выполнения задачи(2000-12-01) или нажмите Enter";
-    public static final String NEW_TIME = "Введите новое время выполнения задачи(09.00, 14.00) или нажмите Enter";
+    public static final String NEW_TIME = "Введите новое время выполнения задачи(09:00, 14:00) или нажмите Enter";
     private final TaskService service;
     private Scanner scanner;
     private final Clear clear;
@@ -59,7 +59,7 @@ public class TaskCommand {
 
         Task task;
         try {
-            task = service.create(name);
+            service.create(name);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
@@ -101,11 +101,7 @@ public class TaskCommand {
         Task task = service.read(id);
         TaskDto taskDto = makeDto(task);
 
-        StringBuilder builder = new StringBuilder();
-        builder.append(Library.getTitle(task.getName()));
-        builder.append(Library.getTaskView(taskDto));
-
-        return builder.toString();
+        return Library.getTitle(task.getName()) + Library.getTaskView(taskDto);
     }
 
     private TaskDto makeDto(Task task) {
@@ -168,9 +164,10 @@ public class TaskCommand {
         isContinue = true;
         while (isContinue) {
             String time = scanner.nextLine();
+
             if (!time.isEmpty()) {
                 try {
-                    task.setTime(Time.getByVal(time));
+                    task.setTime(LocalTime.parse(time));
                 } catch (IllegalArgumentException e) {
                     System.out.println(INCORECT_VALUE);
                     continue;

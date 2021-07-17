@@ -124,7 +124,7 @@ public class TaskServiceImpl implements TaskService {
                     if ((Objects.isNull(o1.getTime())) || (Objects.isNull(o2.getTime()))) {
                         return 1;
                     }
-                    return o1.getTime().getSort().compareTo(o2.getTime().getSort());
+                    return o1.getTime().compareTo(o2.getTime());
                 })
                 .collect(Collectors.toList());
     }

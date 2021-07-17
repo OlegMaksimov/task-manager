@@ -45,7 +45,7 @@ public class Library {
         String parent = Objects.nonNull(task.getParentTask()) ? task.getParentTask().toString() : "NONE";
         String state = Objects.nonNull(task.getState()) ? task.getState().toString() : "NONE";
         String date = Objects.nonNull(task.getStartDate()) ? task.getStartDate().toString() : "NONE";
-        String time = Objects.nonNull(task.getTime()) ? task.getTime().getVal() : "NONE";
+        String time = Objects.nonNull(task.getTime()) ? task.getTime().toString() : "NONE";
         String subTask = "NONE";
         if (Objects.nonNull(task.getSubTasks()) && task.getSubTasks().size() > 0) {
             StringBuilder builder = new StringBuilder("\n");
@@ -61,6 +61,6 @@ public class Library {
     }
 
     private static String getTaskTime(Task task) {
-        return Objects.nonNull(task.getTime()) ? task.getTime().getVal() : "NONE ";
+        return Objects.nonNull(task.getTime()) ? task.getTime().toString() : "NONE ";
     }
 }

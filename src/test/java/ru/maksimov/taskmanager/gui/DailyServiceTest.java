@@ -9,6 +9,8 @@ import org.mockito.Mockito;
 import org.springframework.shell.standard.commands.Clear;
 import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.model.enums.TaskState;
+import ru.maksimov.taskmanager.service.DailyService;
+import ru.maksimov.taskmanager.service.DailyServiceImpl;
 import ru.maksimov.taskmanager.service.TaskService;
 
 import java.time.LocalDate;
@@ -20,14 +22,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-class DailyCommandTest {
+class DailyServiceTest {
 
     static List<Task> taskList = new ArrayList<>();
     private TaskService taskService = Mockito.mock(TaskService.class);
     private Clear clear = Mockito.mock(Clear.class);
     private TaskCommand taskCommand = Mockito.mock(TaskCommand.class);
 
-    private DailyCommand dailyCommand = new DailyCommand(taskService, clear, taskCommand);
+    private DailyService dailyService = new DailyServiceImpl(taskService, clear, taskCommand);
 
     @BeforeAll
     static void init() {
@@ -70,7 +72,7 @@ class DailyCommandTest {
     void getTodayTaskReturnStringTest() {
         when(taskService.getTodayTask()).thenReturn(taskList);
 
-        String result = dailyCommand.getTodayTask();
+        String result = dailyService.getTodayTask();
         System.out.println(result);
 
         Assertions.assertAll(
@@ -90,7 +92,7 @@ class DailyCommandTest {
         when(taskService.getTodayTask()).thenReturn(taskList);
         doNothing().when(clear).clear();
 
-        String dayResultTemplate = dailyCommand.getResultDay();
+        String dayResultTemplate = dailyService.getResultDay();
         System.out.println(dayResultTemplate);
 
         assertTrue(dayResultTemplate.contains("РЕЗУЛЬТАТЫ ДНЯ"));

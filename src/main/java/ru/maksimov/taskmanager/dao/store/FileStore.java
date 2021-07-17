@@ -13,7 +13,6 @@ import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.model.enums.TaskState;
-import ru.maksimov.taskmanager.model.enums.Time;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -21,6 +20,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -89,11 +89,11 @@ public class FileStore implements IStore {
                     task.setStartDate(LocalDate.parse(taskWrapper.getStartDate()));
                 }
                 if (Objects.nonNull(taskWrapper.getTime()) && !taskWrapper.getStartDate().isEmpty()) {
-                    task.setTime(Time.valueOf(taskWrapper.getTime()));
+                    task.setTime(LocalTime.parse(taskWrapper.getTime()));
                 }
                 if (Objects.nonNull(taskWrapper.getSubTasks()) && !Objects.equals("[]", taskWrapper.getSubTasks())) {
                     String[] split = taskWrapper.getSubTasks().replaceAll("\\[", "")
-                            .replaceAll("\\]", "")
+                            .replaceAll("]", "")
                             .replaceAll(" ", "")
                             .split(",");
                     for (String s : split) {

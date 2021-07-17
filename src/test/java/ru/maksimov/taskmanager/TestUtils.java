@@ -2,9 +2,9 @@ package ru.maksimov.taskmanager;
 
 import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.model.enums.TaskState;
-import ru.maksimov.taskmanager.model.enums.Time;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Random;
 
 public class TestUtils {
@@ -47,7 +47,7 @@ public class TestUtils {
                 .parentId(Long.valueOf(getNumeric(1)))
                 .description(getAlphabeticString())
                 .startDate(LocalDate.now())
-                .time(Time.NINE)
+                .time(LocalTime.now())
                 .build();
     }
 }
