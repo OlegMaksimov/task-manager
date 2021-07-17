@@ -61,7 +61,7 @@ public class Task {
     /**
      * Признак главной задачи дня
      */
-    Boolean isMainTask;
+    Boolean isMainTask = Boolean.FALSE;
 
     /**
      * Список подзадач

@@ -7,14 +7,14 @@ import java.util.Objects;
 
 public class Library {
     private static final String TODAY_TASK_TITLE = "" +
-            "TIME   ID   TITLE                                                      MAIN\n";
+            "TIME    MAIN  ID    TITLE                                                      \n";
 
     private static final String TODAY_TASK = "" +
-            "%s  %s    %s                                           %s \n" +
-            "-----  ---  ----------------------------------------------------\n";
+            "%s\t%s\t  %s     %s                                            \n" +
+            "-----   ----  ----  ----------------------------------------------\n";
 
     private static final String TITLE = "\t\t\t\t %s \n" +
-            "-------------------------------------------------------------\n\n";
+            "-----------------------------------------------------------------\n\n";
 
     private static final String TASK_VIEW = "" +
             "описание задачи:   %s\n" +
@@ -26,7 +26,7 @@ public class Library {
 
 
     public static String getTodayTask(Task task) {
-        return String.format(TODAY_TASK, getTaskTime(task), task.getId(), task.getName(), getMainTask(task));
+        return String.format(TODAY_TASK,getTaskTime(task), getMainTask(task), task.getId(), task.getName());
     }
     public static String getTodayTaskTitle(){
         return TODAY_TASK_TITLE;

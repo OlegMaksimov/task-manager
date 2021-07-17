@@ -36,7 +36,7 @@ class DailyServiceTest {
         Task task1 = Task.builder()
                 .id(1L)
                 .name("test1")
-                .startDate(LocalDate.now())
+                .startDate      (LocalDate.now())
                 .state(TaskState.COMPLETE)
                 .isMainTask(Boolean.FALSE)
                 .build();

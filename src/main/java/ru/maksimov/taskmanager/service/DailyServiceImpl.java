@@ -10,10 +10,12 @@ import ru.maksimov.taskmanager.model.enums.TaskState;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ru.maksimov.taskmanager.gui.TaskCommand.*;
 
@@ -35,16 +37,35 @@ public class DailyServiceImpl implements DailyService {
     public String getTodayTask() {
         clear.clear();
 
-        List<Task> taskList = service.getTodayTask().stream()
+        List<Task> taskListWithTime = service.getTodayTask().stream()
                 .filter(task -> task.getState().equals(TaskState.NEW))
+                .filter(task -> Objects.nonNull(task.getTime()))
+                .filter(task -> Boolean.FALSE.equals(task.getIsMainTask()))
+                .sorted(Comparator.comparing(Task::getTime))
                 .collect(Collectors.toList());
+
+         List<Task> taskMainList = service.getTodayTask().stream()
+                .filter(task -> task.getState().equals(TaskState.NEW))
+                .filter(task -> Boolean.TRUE.equals(task.getIsMainTask()))
+                .sorted(Comparator.comparing(Task::getId))
+                .collect(Collectors.toList());
+
+
+        List<Task> taskListWithoutTime = service.getTodayTask().stream()
+                .filter(task -> task.getState().equals(TaskState.NEW))
+                .filter(task -> Objects.isNull(task.getTime()))
+                .filter(task -> Boolean.FALSE.equals(task.getIsMainTask()))
+                .sorted(Comparator.comparing(Task::getId))
+                .collect(Collectors.toList());
+
+        taskListWithTime.addAll(taskMainList);
+        taskListWithTime.addAll(taskListWithoutTime);
+
         StringBuilder builder = new StringBuilder();
         builder.append(Library.getTitle(TASK_FOR_TODAY));
         builder.append(Library.getTodayTaskTitle());
 
-        for (Task task : taskList) {
-            builder.append(Library.getTodayTask(task));
-        }
+        taskListWithTime.stream().forEach(task ->  builder.append(Library.getTodayTask(task)));
 
         return builder.toString();
     }
