@@ -2,6 +2,7 @@ package ru.maksimov.taskmanager.gui;
 
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
 import ru.maksimov.taskmanager.service.DailyService;
 
 @ShellComponent
@@ -27,5 +28,12 @@ public class DailyCommand {
     @ShellMethod(key = "today-result", value = "The method return result of the day.")
     public String getResultDay() {
         return dailyService.getResultDay();
+    }
+
+    @ShellMethod(key = "today-remove", value = "The method remove task from day plan. Example: today-remove \" <parent_task_id> \"")
+    public String removeTaskFromDayPlan(
+            @ShellOption Long id
+    ) {
+        return dailyService.removeTaskFromDayPlan(id);
     }
 }

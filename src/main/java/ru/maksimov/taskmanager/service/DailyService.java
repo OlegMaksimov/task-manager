@@ -7,4 +7,6 @@ public interface DailyService {
     String planningDay();
 
     String getResultDay();
+
+    String removeTaskFromDayPlan(Long id);
 }

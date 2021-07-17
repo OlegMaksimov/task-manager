@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static ru.maksimov.taskmanager.gui.TaskCommand.*;
 
@@ -65,7 +64,7 @@ public class DailyServiceImpl implements DailyService {
         builder.append(Library.getTitle(TASK_FOR_TODAY));
         builder.append(Library.getTodayTaskTitle());
 
-        taskListWithTime.stream().forEach(task ->  builder.append(Library.getTodayTask(task)));
+        taskListWithTime.forEach(task -> builder.append(Library.getTodayTask(task)));
 
         return builder.toString();
     }
@@ -133,5 +132,15 @@ public class DailyServiceImpl implements DailyService {
         clear.clear();
         List<Task> taskList = service.getTodayTask();
         return DaylyLibrary.getDayResultTemplate(taskList);
+    }
+
+    @Override
+    public String removeTaskFromDayPlan(Long id) {
+        Task task = service.read(id);
+        if (Objects.nonNull(task)) {
+            task.setStartDate(null);
+            task.setTime(null);
+        }
+        return getTodayTask();
     }
 }
