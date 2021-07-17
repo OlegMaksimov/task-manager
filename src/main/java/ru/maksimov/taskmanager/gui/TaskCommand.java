@@ -82,7 +82,7 @@ public class TaskCommand {
         scanner = new Scanner(System.in);
         String name = scanner.nextLine();
         try {
-            Task task = service.createSubTask(name, id);
+            Task task = service.createSubTask(parentTask.getName() + ":" + name, id);
             parentTask.addSubTask(task.getId());
             service.update(parentTask);
             return task.toString();
