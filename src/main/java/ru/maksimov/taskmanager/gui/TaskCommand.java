@@ -28,8 +28,8 @@ public class TaskCommand {
     public static final String TASK_NOT_FOUND = "Задача не найдена!";
     public static final String NEW_NAME = "Введите новое имя задачи или нажмите Enter";
     public static final String NEW_DESCRIPTION = "Введите новое описание задачи или нажмите Enter";
-    public static final String NEW_DATE = "Введите новую дату выполнения задачи(2000-12-01) или нажмите Enter";
-    public static final String NEW_TIME = "Введите новое время выполнения задачи(09:00, 14:00) или нажмите Enter";
+    public static final String NEW_DATE = "Введите новую дату выполнения задачи(2000-12-01, null) или нажмите Enter";
+    public static final String NEW_TIME = "Введите новое время выполнения задачи(09:00, 14:00, null) или нажмите Enter";
     private final TaskService service;
     private Scanner scanner;
     private final Clear clear;
@@ -151,7 +151,11 @@ public class TaskCommand {
             String date = scanner.nextLine();
             if (!date.isEmpty()) {
                 try {
-                    task.setStartDate(LocalDate.parse(date));
+                    if ("null".equals(date)) {
+                        task.setStartDate(null);
+                    } else {
+                        task.setStartDate(LocalDate.parse(date));
+                    }
                 } catch (Exception e) {
                     System.out.println(INCORECT_VALUE);
                     continue;
@@ -167,7 +171,11 @@ public class TaskCommand {
 
             if (!time.isEmpty()) {
                 try {
-                    task.setTime(LocalTime.parse(time));
+                    if ("null".equals(time)) {
+                        task.setTime(null);
+                    } else {
+                        task.setTime(LocalTime.parse(time));
+                    }
                 } catch (IllegalArgumentException e) {
                     System.out.println(INCORECT_VALUE);
                     continue;
