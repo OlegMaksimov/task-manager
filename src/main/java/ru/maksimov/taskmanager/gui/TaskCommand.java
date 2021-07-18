@@ -30,6 +30,8 @@ public class TaskCommand {
     public static final String NEW_DESCRIPTION = "Введите новое описание задачи или нажмите Enter";
     public static final String NEW_DATE = "Введите новую дату выполнения задачи(2000-12-01, null) или нажмите Enter";
     public static final String NEW_TIME = "Введите новое время выполнения задачи(09:00, 14:00, null) или нажмите Enter";
+    public static final String IS_MAIN_TASK = "Это главная задача дня: (y|enter)";
+    public static final String IS_REPEAT_TASK = "Это повторяющася задача: (y|enter)";
     private final TaskService service;
     private Scanner scanner;
     private final Clear clear;
@@ -143,6 +145,18 @@ public class TaskCommand {
         String description = scanner.nextLine();
         if (!description.isEmpty()) {
             task.setDescription(description);
+        }
+
+        System.out.println(IS_MAIN_TASK);
+        String isMainTask = scanner.nextLine();
+        if (!newName.isEmpty()) {
+            task.setIsMainTask("y".equalsIgnoreCase(isMainTask));
+        }
+
+        System.out.println(IS_REPEAT_TASK);
+        String isRepeatableTask = scanner.nextLine();
+        if (!newName.isEmpty()) {
+            task.setIsRepeatableTask("y".equalsIgnoreCase(isRepeatableTask));
         }
 
         System.out.println(NEW_DATE);

@@ -23,6 +23,7 @@ public class DailyServiceImpl implements DailyService {
 
     private static final String TASK_FOR_TODAY = "ЗАДАЧИ НА СЕГОДНЯ:";
     public static final String IS_MAIN_TASK = "Это главная задача дня: (y|enter)";
+    public static final String IS_REPEAT_TASK = "Это повторяющася задача: (y|enter)";
     private final TaskService service;
     private final Clear clear;
     private final TaskCommand taskCommand;
@@ -105,7 +106,7 @@ public class DailyServiceImpl implements DailyService {
             String isMainTask = scanner.nextLine();
             task.setIsMainTask("y".equalsIgnoreCase(isMainTask));
 
-            System.out.println("Это повторяющася задача: (y|enter)");
+            System.out.println(IS_REPEAT_TASK);
             String isRepeatableTask = scanner.nextLine();
             task.setIsMainTask("y".equalsIgnoreCase(isRepeatableTask));
 
