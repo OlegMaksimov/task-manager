@@ -35,7 +35,7 @@ public class FileStore implements IStore {
 
     private final Map<Long, Task> taskMap;
 
-    private final String[] HEADERS = {"ID", "NAME", "STATE", "PARENTID", "DESCRIPTION", "STARTDATE", "TIME", "SUBTASKS"};
+    private final String[] HEADERS = {"ID", "NAME", "STATE", "PARENTID", "DESCRIPTION", "STARTDATE", "TIME", "SUBTASKS", "ISREPEATABLETASK"};
 
     public FileStore(@Value("${store.filename}") String fileName, @Qualifier("store") Map<Long, Task> taskMap) {
         this.fileName = fileName;
@@ -84,6 +84,7 @@ public class FileStore implements IStore {
                         .state(TaskState.valueOf(taskWrapper.getState()))
                         .parentId(taskWrapper.getParentId())
                         .description(taskWrapper.getDescription())
+                        .isRepeatableTask(new Boolean(taskWrapper.getIsRepeatableTask()))
                         .build();
                 if (Objects.nonNull(taskWrapper.getStartDate())) {
                     task.setStartDate(LocalDate.parse(taskWrapper.getStartDate()));
@@ -143,7 +144,9 @@ public class FileStore implements IStore {
                 new org.supercsv.cellprocessor.Optional(), // description
                 new org.supercsv.cellprocessor.Optional(),// date
                 new org.supercsv.cellprocessor.Optional(), //time
-                new org.supercsv.cellprocessor.Optional() //subTasks
+                new org.supercsv.cellprocessor.Optional(), //subTasks
+                new org.supercsv.cellprocessor.Optional() //repeat
+
         };
     }
 }

@@ -199,12 +199,16 @@ public class TaskCommand {
     }
 
     @ShellMethod(key = "task-complete", value = "The method for complete task. Example: task-complete <task_id>")
-    public String CompleteTask(
+    public String completeTask(
             @ShellOption Long id
-    ) {
+                              ) {
         clear.clear();
 
-        service.completeTask(id);
+        try {
+            service.completeTask(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return getListTask();
     }
 

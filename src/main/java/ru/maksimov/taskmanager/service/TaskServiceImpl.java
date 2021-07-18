@@ -106,7 +106,7 @@ public class TaskServiceImpl implements TaskService {
      * @see TaskState
      */
     @Override
-    public Task completeTask(Long id) {
+    public Task completeTask(Long id) throws Exception {
         return dao.completeTask(id);
     }
 
@@ -120,6 +120,7 @@ public class TaskServiceImpl implements TaskService {
         List<Task> taskList = getList();
         return taskList.stream()
                 .filter(e -> LocalDate.now().equals(e.getStartDate()))
+                // TODO: 18.07.2021 подумать над тем чтобы убрать это отсюда
                 .sorted((o1, o2) -> {
                     if ((Objects.isNull(o1.getTime())) || (Objects.isNull(o2.getTime()))) {
                         return 1;

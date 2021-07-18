@@ -22,6 +22,7 @@ import static ru.maksimov.taskmanager.gui.TaskCommand.*;
 public class DailyServiceImpl implements DailyService {
 
     private static final String TASK_FOR_TODAY = "ЗАДАЧИ НА СЕГОДНЯ:";
+    public static final String IS_MAIN_TASK = "Это главная задача дня: (y|enter)";
     private final TaskService service;
     private final Clear clear;
     private final TaskCommand taskCommand;
@@ -100,10 +101,13 @@ public class DailyServiceImpl implements DailyService {
 
             task.setStartDate(LocalDate.now());
 
-            System.out.println("Это главная задача дня: (y|enter)");
+            System.out.println(IS_MAIN_TASK);
             String isMainTask = scanner.nextLine();
-
             task.setIsMainTask("y".equalsIgnoreCase(isMainTask));
+
+            System.out.println("Это повторяющася задача: (y|enter)");
+            String isRepeatableTask = scanner.nextLine();
+            task.setIsMainTask("y".equalsIgnoreCase(isRepeatableTask));
 
             System.out.println(NEW_TIME);
             String taskTime = scanner.nextLine();

@@ -48,6 +48,7 @@ public class TestUtils {
                 .description(getAlphabeticString())
                 .startDate(LocalDate.now())
                 .time(LocalTime.now())
+                .isRepeatableTask(Boolean.TRUE)
                 .build();
     }
 }

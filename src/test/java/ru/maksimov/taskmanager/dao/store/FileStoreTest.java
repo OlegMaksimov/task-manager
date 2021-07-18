@@ -39,18 +39,20 @@ class FileStoreTest {
         Assertions.assertAll(
                 () -> assertTrue(result),
                 () -> assertTrue(file.exists())
-        );
-        file.delete();
+                            );
+        boolean delete = file.delete();
+        assert (delete);
     }
 
 
-    //    @Test
-    @SuppressWarnings("unchecked")
+    @Test
     void writeToStoreMultipleTask() throws Exception {
         Task task = getTask();
         Task task1 = getTask();
         Task task2 = getTask();
-        Map<Long, Task> taskMap = new HashMap();
+        task1.setIsRepeatableTask(Boolean.FALSE);
+
+        Map<Long, Task> taskMap = new HashMap<>();
         taskMap.put(task.getId(), task);
         taskMap.put(task1.getId(), task1);
         taskMap.put(task2.getId(), task2);
@@ -69,10 +71,11 @@ class FileStoreTest {
         List<Task> taskList = iStore.readFromStore();
         assertEquals(3, taskList.size());
 
-        file.delete();
+        boolean delete = file.delete();
+        assert (delete);
     }
 
-    //    @Test
+    @Test
     @SuppressWarnings({"unchecked", "rawtypes"})
     void readFromStore() {
         Task task = getTask();
@@ -91,16 +94,17 @@ class FileStoreTest {
 
         assertEquals(3, taskList.size());
 
-        file.delete();
+        boolean delete = file.delete();
+        assert (delete);
     }
 
-    //    @Test
+    @Test
     void initStore() {
         Task task = getTask();
         Task task1 = getTask();
         Task task2 = getTask();
         task.addSubTask(task2.getId());
-        Map<Long, Task> taskMap = new HashMap();
+        Map<Long, Task> taskMap = new HashMap<>();
         taskMap.put(task.getId(), task);
         taskMap.put(task1.getId(), task1);
         taskMap.put(task2.getId(), task2);
@@ -108,13 +112,14 @@ class FileStoreTest {
 
         file = new File(FILENAME);
         if (file.exists()) {
-            file.delete();
+            boolean delete = file.delete();
         }
         iStore.writeToStore();
 
         Assertions.assertEquals(3, iStore.initStore());
 
-        file.delete();
+        boolean delete = file.delete();
+        assert delete;
     }
 
 }

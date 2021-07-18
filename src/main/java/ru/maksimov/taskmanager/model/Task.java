@@ -7,6 +7,7 @@ import ru.maksimov.taskmanager.model.enums.TaskState;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
@@ -64,6 +65,11 @@ public class Task {
     Boolean isMainTask = Boolean.FALSE;
 
     /**
+     * Признак повторяющейся задачи
+     */
+    Boolean isRepeatableTask = Boolean.FALSE;
+
+    /**
      * Список подзадач
      */
     List<Long> subTasks = new ArrayList<>();
@@ -88,6 +94,19 @@ public class Task {
         this.state = state;
     }
 
+    private Task(Task task) {
+        this.id = countTask.incrementAndGet();
+        this.name = task.getName();
+        this.description = task.getDescription();
+        this.state = task.getState();
+        this.startDate = task.getStartDate();
+        this.time = task.getTime();
+        this.parentId = task.getParentId();
+        this.isMainTask = task.isMainTask;
+        this.isRepeatableTask = task.isRepeatableTask;
+        this.subTasks = task.getSubTasks() == null ? null : new LinkedList<>(task.getSubTasks());
+    }
+
     public static Task getInstance(Long id, String taskName, String taskState) {
 
         return new Task(id, taskName, TaskState.valueOf(taskState));
@@ -107,9 +126,13 @@ public class Task {
 
     public void addSubTask(Long taskId) {
         if (Objects.isNull(this.subTasks)) {
-            subTasks = new ArrayList<>();
+            subTasks = new LinkedList<>();
         }
         this.subTasks.add(taskId);
+    }
+
+    public static Task clone(Task task) {
+        return new Task(task);
     }
 
     @Override

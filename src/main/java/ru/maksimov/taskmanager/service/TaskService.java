@@ -71,7 +71,7 @@ public interface TaskService {
      * @return Возвращает измененную задачу
      * @see TaskState
      */
-    Task completeTask(Long id);
+    Task completeTask(Long id) throws Exception;
 
     /**
      * Возвращает список задач на сегодня

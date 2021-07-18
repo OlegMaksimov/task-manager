@@ -115,7 +115,7 @@ public class TaskDaoImpl implements TaskDAO {
     @Override
     public void writeToStore() {
         // TODO: 08.03.2021 @Async
-        CompletableFuture.runAsync(() -> store.writeToStore());
+        CompletableFuture.runAsync(store::writeToStore);
     }
 
     /**
@@ -134,10 +134,12 @@ public class TaskDaoImpl implements TaskDAO {
      * @see TaskState
      */
     @Override
-    public Task completeTask(Long id) {
+    public Task completeTask(Long id) throws Exception {
         Task task = taskMap.get(id);
+        Task newTask = Task.clone(task);
+        newTask.setStartDate(null);
         task.complete();
-        writeToStore();
-        return taskMap.get(id);
+        newTask = create(newTask);
+        return taskMap.get(newTask.getId());
     }
 }

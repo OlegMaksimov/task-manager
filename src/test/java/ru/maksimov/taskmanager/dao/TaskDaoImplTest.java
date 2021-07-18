@@ -171,9 +171,11 @@ class TaskDaoImplTest {
     void completeTask() throws Exception {
         taskDAO.create(task);
 
-        Task checkTask = taskDAO.completeTask(task.getId());
+        Task newTask = taskDAO.completeTask(task.getId());
+        Task oldTask = taskDAO.read(task.getId());
 
-        Assertions.assertEquals(TaskState.COMPLETE, checkTask.getState());
+        Assertions.assertEquals(TaskState.NEW, newTask.getState());
+        Assertions.assertEquals(TaskState.COMPLETE, oldTask.getState());
     }
 
     private Task makeTask() {

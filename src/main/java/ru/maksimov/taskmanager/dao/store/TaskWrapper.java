@@ -20,4 +20,5 @@ public class TaskWrapper {
     String startDate;
     String time;
     String subTasks;
+    String isRepeatableTask;
 }
