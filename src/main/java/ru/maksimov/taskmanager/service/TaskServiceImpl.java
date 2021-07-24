@@ -120,6 +120,7 @@ public class TaskServiceImpl implements TaskService {
         List<Task> taskList = getList();
         return taskList.stream()
                 .filter(e -> LocalDate.now().equals(e.getStartDate()))
+                .filter(Objects::nonNull)
                 // TODO: 18.07.2021 подумать над тем чтобы убрать это отсюда
                 .sorted((o1, o2) -> {
                     if ((Objects.isNull(o1.getTime())) || (Objects.isNull(o2.getTime()))) {

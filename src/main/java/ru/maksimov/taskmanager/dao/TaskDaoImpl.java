@@ -136,10 +136,12 @@ public class TaskDaoImpl implements TaskDAO {
     @Override
     public Task completeTask(Long id) throws Exception {
         Task task = taskMap.get(id);
-        Task newTask = Task.clone(task);
-        newTask.setStartDate(null);
-        task.complete();
-        newTask = create(newTask);
-        return taskMap.get(newTask.getId());
+        if (task.getIsRepeatableTask()) {
+            Task newTask = Task.clone(task);
+            newTask.setStartDate(null);
+            task.complete();
+            newTask = create(newTask);
+        }
+        return taskMap.get(task.getId());
     }
 }

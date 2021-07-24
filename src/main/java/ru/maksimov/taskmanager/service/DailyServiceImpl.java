@@ -45,13 +45,6 @@ public class DailyServiceImpl implements DailyService {
                 .sorted(Comparator.comparing(Task::getTime))
                 .collect(Collectors.toList());
 
-         List<Task> taskMainList = service.getTodayTask().stream()
-                .filter(task -> task.getState().equals(TaskState.NEW))
-                .filter(task -> Boolean.TRUE.equals(task.getIsMainTask()))
-                .sorted(Comparator.comparing(Task::getId))
-                .collect(Collectors.toList());
-
-
         List<Task> taskListWithoutTime = service.getTodayTask().stream()
                 .filter(task -> task.getState().equals(TaskState.NEW))
                 .filter(task -> Objects.isNull(task.getTime()))
@@ -59,7 +52,6 @@ public class DailyServiceImpl implements DailyService {
                 .sorted(Comparator.comparing(Task::getId))
                 .collect(Collectors.toList());
 
-        taskListWithTime.addAll(taskMainList);
         taskListWithTime.addAll(taskListWithoutTime);
 
         StringBuilder builder = new StringBuilder();
@@ -108,7 +100,7 @@ public class DailyServiceImpl implements DailyService {
 
             System.out.println(IS_REPEAT_TASK);
             String isRepeatableTask = scanner.nextLine();
-            task.setIsMainTask("y".equalsIgnoreCase(isRepeatableTask));
+            task.setIsRepeatableTask("y".equalsIgnoreCase(isRepeatableTask));
 
             System.out.println(NEW_TIME);
             String taskTime = scanner.nextLine();

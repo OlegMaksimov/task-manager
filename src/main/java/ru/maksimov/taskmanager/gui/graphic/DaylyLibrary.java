@@ -3,7 +3,9 @@ package ru.maksimov.taskmanager.gui.graphic;
 import ru.maksimov.taskmanager.model.Task;
 import ru.maksimov.taskmanager.model.enums.TaskState;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -23,31 +25,36 @@ public class DaylyLibrary {
     public static String getDayResultTemplate(List<Task> todayTask) {
         StringBuilder builder = new StringBuilder();
         builder.append(Library.getTitle("РЕЗУЛЬТАТЫ ДНЯ"));
-        builder.append(String.format(TODAY_TASK_RESULT, getCompletedTask(todayTask), getUnCompletedTask(todayTask),
-                getMainTask(todayTask)));
+        if (Objects.nonNull(todayTask)) {
+            builder.append(String.format(TODAY_TASK_RESULT, getCompletedTask(todayTask), getUnCompletedTask(todayTask),
+                    getMainTask(todayTask)));
+        }
         return builder.toString();
     }
 
-    private static Object getMainTask(List<Task> todayTask) {
+    private static Object getMainTask(@NotNull List<Task> todayTask) {
         StringJoiner joiner = new StringJoiner("\n");
         todayTask.stream()
                 .filter(Task::getIsMainTask)
+                .filter(Objects::nonNull)
                 .forEach(e -> joiner.add(e.toString() + "\t" + e.getState()));
         return joiner.toString();
     }
 
-    private static Object getUnCompletedTask(List<Task> todayTask) {
+    private static Object getUnCompletedTask(@NotNull List<Task> todayTask) {
         StringJoiner joiner = new StringJoiner("\n");
         todayTask.stream()
                 .filter(task -> TaskState.NEW.equals(task.getState()))
+                .filter(Objects::nonNull)
                 .forEach(e -> joiner.add(e.toString()));
         return joiner.toString();
     }
 
-    private static String getCompletedTask(List<Task> todayTask) {
+    private static String getCompletedTask(@NotNull List<Task> todayTask) {
         StringJoiner joiner = new StringJoiner("\n");
         todayTask.stream()
                 .filter(task -> TaskState.COMPLETE.equals(task.getState()))
+                .filter(Objects::nonNull)
                 .forEach(e -> joiner.add(e.toString()));
         return joiner.toString();
     }

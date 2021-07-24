@@ -85,11 +85,12 @@ public class FileStore implements IStore {
                         .parentId(taskWrapper.getParentId())
                         .description(taskWrapper.getDescription())
                         .isRepeatableTask(new Boolean(taskWrapper.getIsRepeatableTask()))
+                        .isMainTask(Boolean.FALSE)
                         .build();
                 if (Objects.nonNull(taskWrapper.getStartDate())) {
                     task.setStartDate(LocalDate.parse(taskWrapper.getStartDate()));
                 }
-                if (Objects.nonNull(taskWrapper.getTime()) && !taskWrapper.getStartDate().isEmpty()) {
+                if (Objects.nonNull(taskWrapper.getTime())) {
                     task.setTime(LocalTime.parse(taskWrapper.getTime()));
                 }
                 if (Objects.nonNull(taskWrapper.getSubTasks()) && !Objects.equals("[]", taskWrapper.getSubTasks())) {
